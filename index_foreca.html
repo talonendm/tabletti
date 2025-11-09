@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Keittiön tabletti</title>
+    <style>
+        :root {
+            --bg: #111;
+            --fg: #f5f5f5;
+            --accent: #9cf;
+            --card: #222;
+        }
+
+        body.light {
+            --bg: #fafafa;
+            --fg: #111;
+            --accent: #0056cc;
+            --card: #fff;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            overflow: hidden;
+            transition: background 0.6s ease, color 0.6s ease;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        header {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        #header-bottom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        section {
+            background: var(--card);
+            border-radius: 1rem;
+            padding: 0.5rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        h2 {
+            margin: 0.2rem 0 0.5rem 0;
+            color: var(--accent);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Kuvaboksi 1:1 */
+        .photo-box {
+            position: relative;
+            width: 30%;
+            padding-top: 30%;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .photo-box img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.6s;
+        }
+
+        /* Sää-iframe-container */
+        .weather-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 0.5rem;
+        }
+
+        .weather-box {
+            flex: 1;
+            min-width: 120px;
+            height: 250px;
+            border-radius: 0.8rem;
+            overflow: hidden;
+        }
+
+        .weather-box iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        #news {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>Keittiön tabletti</div>
+        <div id="header-bottom">
+            <div id="clock"></div>
+            <div id="note"></div>
+        </div>
+    </header>
+
+    <!-- Kuvaboksi -->
+    <section id="photos">
+        <h2>Kuvat</h2>
+        <div class="photo-box">
+            <img id="photo" src="" alt="Kuva ladataan..." />
+        </div>
+    </section>
+
+    <!-- Sää -->
+    <section id="weather">
+        <h2>Sää</h2>
+        <div class="weather-container">
+            <div class="weather-box">
+                <iframe src="https://www.foreca.fi/Finland/Eura/Panelia/"></iframe>
+            </div>
+            <div class="weather-box">
+                <iframe src="https://www.foreca.fi/Finland/Kirkkonummi"></iframe>
+            </div>
+            <div class="weather-box">
+                <iframe src="https://www.foreca.fi/widget/fi/Oulu?type=medium"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Uutiset -->
+    <section id="news">
+        <h2>Uutiset</h2>
+        <div id="newsList">Ladataan...</div>
+    </section>
+
+    <script>
+        /* --------------------
+           Teeman vaihto (päivä/yö)
+        -------------------- */
+        function setTheme() {
+            const hour = new Date().getHours();
+            const isDay = hour >= 7 && hour < 19;
+            document.body.classList.toggle("light", isDay);
+        }
+        setTheme();
+        setInterval(setTheme, 10 * 60 * 1000);
+
+        /* --------------------
+           Reaaliaikainen kello + päivän note
+        -------------------- */
+        const NOTE_JSON_URL = "notes.json";
+        let notes = [];
+
+        async function loadNotes() {
+            try {
+                const res = await fetch(NOTE_JSON_URL + "?t=" + Date.now());
+                notes = await res.json();
+            } catch {
+                notes = [];
+            }
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById("clock").textContent = now.toLocaleDateString("fi-FI", options);
+
+            const todayStr = now.toISOString().split('T')[0];
+            const note = notes.find(n => n.date === todayStr);
+            document.getElementById("note").textContent = note ? note.text : "";
+        }
+
+        loadNotes();
+        setInterval(updateClock, 1000);
+
+        /* --------------------
+           Kuvaboksi
+        -------------------- */
+        const IMAGES_JSON_URL = "images.json";
+        const IMAGE_BASE_URL = "images/";
+        const photoEl = document.getElementById("photo");
+        let images = [], index = 0;
+
+        async function loadImages() {
+            try {
+                const res = await fetch(IMAGES_JSON_URL + "?t=" + Date.now());
+                const data = await res.json();
+                images = data.map(x => x.startsWith("http") ? x : IMAGE_BASE_URL + x);
+                if (images.length) showImage();
+            } catch {
+                photoEl.alt = "Kuvien lataus epäonnistui";
+            }
+        }
+
+        function showImage() {
+            if (!images.length) return;
+            photoEl.style.opacity = 0;
+            setTimeout(() => {
+                photoEl.src = images[index] + "?t=" + Date.now();
+                photoEl.style.opacity = 1;
+                index = (index + 1) % images.length;
+            }, 500);
+        }
+
+        loadImages();
+        setInterval(showImage, 60 * 1000);
+
+        /* --------------------
+           Uutiset (Yle RSS)
+        -------------------- */
+        async function fetchRSS(rssUrl, name) {
+            const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                return `<h3>${name}</h3><ul>` +
+                    data.items.slice(0, 5).map(i => `<li><a href="${i.link}" target="_blank">${i.title}</a></li>`).join("") +
+                    "</ul>";
+            } catch {
+                return `<p>${name}: ei saatavilla</p>`;
+            }
+        }
+
+        async function fetchNews() {
+            const yle = await fetchRSS("https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss", "Yle");
+            document.getElementById("newsList").innerHTML = yle;
+        }
+
+        fetchNews();
+        setInterval(fetchNews, 15 * 60 * 1000);
+    </script>
+</body>
+
+</html>
