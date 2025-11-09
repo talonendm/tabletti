@@ -1,17 +1,37 @@
-# tabletti
-Tablet view
+# Keittiön tabletti – vanhan Android-tabletin uusi elämä
+
+Tämä projekti tekee vanhasta tabletista hyödyllisen **info- ja näyttöruudun**, joka näyttää:
+
+- 🕓 **Kellonajan ja päivän muistiinpanon** (`notes.json`-tiedostosta)  
+- 🌦️ **Sään useasta paikasta** (OpenWeatherMap API:n kautta)  
+- 📰 **Tuoreimmat uutisotsikot** (Ylen RSS-syötteestä)  
+- 🖼️ **Vaihtuvat kuvat** `images`-kansiosta  
+- 🚏 **Pikalinkit HSL-pysäkeille ja terminaaleille**
+
+Sivu on suunniteltu pyörimään täysnäyttöisenä vanhalla Android-tabletilla, esimerkiksi keittiön seinällä.
+
+## 🔧 Asennus ja käyttö
+
+**Kloonaa repositorio**
+
+```bash
+   git clone https://github.com/<käyttäjä>/tabletti.git
+   cd tabletti
+```
+
+# Cloudflare
+
+⚠️ Tietoturva: Älä laita julkiseen repositioon API-avaimia. Käytä esimerkiksi Cloudflare Worker -välipalvelinta API-kutsujen suojaamiseen.
 
 ## OpenWeather
 
 - [API Keys](https://home.openweathermap.org/api_keys)
-  - testing: Warning received! talonendm/tabletti - OpenWeatherMap Token exposed on GitHub.
-    - action: key deleted
+  - testing: Warning received automatically! talonendm/tabletti - OpenWeatherMap Token exposed on GitHub.
+    - OpenWeatherAPIn rajoitus ei toiminut. Action: key deleted
+  - 🌤️ Attribution: Säädata: OpenWeather
+        - Logo ja teksti: “Weather data provided by OpenWeather”
 
-
-# Cloudflare
-
-
-# Worker
+## Worker
 
 (Cloudflare Worker) on se tapa piilottaa API-avain, vaikka sivusi olisi GitHub Pagesissa. Tämä ratkaisu on kevyt, ilmainen ja toimii jopa jatkuvasti 24/7. GitHub Pages (tabletti-sivusi) hakee sään välipalvelimen kautta:
 
@@ -38,8 +58,8 @@ export default {
     return new Response("Hello World!");
   }
 }
-
 ```
+
 Huom! Tuo “Hello World!”-versio tarkoittaa, että olet avannut Worker-editorin Workers SDK -mallilla, jota voi muokata mutta vain oikeasta paikasta. Korvaa oikeassa paikassa koodi:
 
 - Mene Cloudflare hallintaan → Workers & Pages
@@ -49,7 +69,6 @@ Huom! Tuo “Hello World!”-versio tarkoittaa, että olet avannut Worker-editor
 - Poista kaikki siellä oleva koodi ja liitä tämä minun versio:
 
 ```
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -83,7 +102,6 @@ export default {
     });
   }
 };
-
 ```
 
 ## 3. Lisää API-avain turvallisesti ympäristömuuttujaksi
@@ -94,11 +112,9 @@ export default {
 
 
 ```
-
 https://tabletti-saa.username.workers.dev/weather?city=Helsinki
 https://tabletti-saa.username.workers.dev/forecast?city=Helsinki
 https://tabletti-saa.username.workers.dev/air?lat=60.17&lon=24.94
-
 ```
 
 Kun haetaan esim. weather?city=Helsinki, Worker hakee ensin sään (weather) JSON:ista coord.lat ja coord.lon.
@@ -129,6 +145,43 @@ fs.readdir(imagesDir, (err, files) => {
 
 Aja skripti terminaalissa:  `node generate-images-json.js` Tämä luo images.json-tiedoston, jossa on kaikki images-kansion kuvat.
 
+# koodista
 
+## Teema
+
+```
+/* --------------------
+   Teeman vaihto (päivä/yö)
+-------------------- */
+
+// Siirrä nämä ennen setTheme()-kutsua
+const toggleBtn = document.getElementById("themeToggle");
+let manualTheme = null; // null = automaattinen
+
+function setTheme() {
+    if (manualTheme) return; // jos käyttäjä on valinnut käsin, ei automaattista vaihtoa
+    const hour = new Date().getHours();
+    const isDay = hour >= 7 && hour < 19;
+    document.body.classList.toggle("light", isDay);
+    toggleBtn.textContent = isDay ? "☀️" : "🌙";
+}
+
+toggleBtn.addEventListener("click", () => {
+    if (manualTheme === "light") {
+        document.body.classList.remove("light");
+        manualTheme = "dark";
+        toggleBtn.textContent = "🌙";
+    } else {
+        document.body.classList.add("light");
+        manualTheme = "light";
+        toggleBtn.textContent = "☀️";
+    }
+});
+
+// nyt vasta kutsutaan ensimmäisen kerran
+setTheme();
+setInterval(setTheme, 10 * 60 * 1000);
+
+```
 
 
