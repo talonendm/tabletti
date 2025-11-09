@@ -169,6 +169,13 @@
             </ul>
             <h2>Uutiset</h2>
             <div id="newsList">Ladataan...</div>
+            <div style="font-size:0.7rem; text-align:center; margin-top:0.3rem;">
+                Weather data provided by
+                <a href="https://openweathermap.org/" target="_blank" style="color:var(--accent)">
+                    OpenWeather <img src="logoopenweather.png" alt="OpenWeatherMap" style="height:20px; vertical-align:middle;">
+
+                </a>
+            </div>
 
 
         </div>
@@ -212,23 +219,40 @@
         loadImages(); setInterval(showImage, 60000);
 
         /* -------------------- Sää (OpenWeatherMap) -------------------- */
-        const API_KEY = "5100286bfe762fe2dcdb43dd7517e088";
+        const API_KEY = "51002..."; // disabled - using https://dash.cloudflare.com/workers/tabletti-saaa
         const LOCATIONS = ["Kirkkonummi", "Espoo", "Helsinki", "Saariselkä", "Panelia", "Imatra", "Kööpenhamina"];
         const container = document.getElementById("weatherContainer");
+
         async function fetchWeather() {
             container.innerHTML = "";
             for (const city of LOCATIONS) {
                 try {
-                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=fi&appid=${API_KEY}`);
+                    const res = await fetch(`https://tabletti-saaa.talonen-dm.workers.dev/weather?city=${encodeURIComponent(city)}`);
                     const data = await res.json();
                     const box = document.createElement("div");
                     box.className = "weather-box";
                     box.innerHTML = `<strong>${data.name}</strong><br>${data.weather[0].description}<br>🌡️ ${data.main.temp.toFixed(1)} °C<br>💨 ${data.wind.speed} m/s`;
+
+                    // Ennuste (forecast, 5 päivän)
+                    const fRes = await fetch(`https://tabletti-saaa.talonen-dm.workers.dev/forecast?city=${encodeURIComponent(city)}`);
+                    const fData = await fRes.json();
+                    const next3 = fData.list.slice(0, 3).map(x => `${x.dt_txt}: ${x.main.temp.toFixed(1)} °C`).join("<br>");
+                    box.innerHTML += `<br><em>Ennuste:</em><br>${next3}`;
+
+                    // Ilmanlaatu (air)
+                    const lat = data.coord.lat, lon = data.coord.lon;
+                    const aRes = await fetch(`https://tabletti-saaa.talonen-dm.workers.dev/air?lat=${lat}&lon=${lon}`);
+                    const aData = await aRes.json();
+                    box.innerHTML += `<br><em>Ilmanlaatu:</em> PM2.5 ${aData.list[0].components.pm2_5} μg/m³`;
+
                     container.appendChild(box);
                 } catch { const box = document.createElement("div"); box.className = "weather-box"; box.textContent = `${city}: ei saatavilla`; container.appendChild(box); }
             }
         }
-        fetchWeather(); setInterval(fetchWeather, 600000);
+        fetchWeather();
+        // setInterval(fetchWeather, 600000);
+        setInterval(fetchWeather, 15 * 60 * 1000); // 15 minuutin välein
+
 
         /* -------------------- Uutiset (Yle RSS) -------------------- */
         async function fetchRSS(rssUrl, name) {
