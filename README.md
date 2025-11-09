@@ -184,4 +184,8 @@ setInterval(setTheme, 10 * 60 * 1000);
 
 ```
 
+### Wake lock
 
+📌 Huomioita
+
+Wake Lock toimii vain aktiivisessa ja näkyvässä välilehdessä.Manuaalinen teema tallentuu vain sessioksi (voi halutessa lisätä localStorage-tuen). Vanhemmissa tableteissa voi olla rajoituksia Wake Lockin käytölle, joten näyttö kannattaa tarvittaessa laittaa "ei koskaan sammuvaksi" asetuksista.
