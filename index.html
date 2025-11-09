@@ -283,10 +283,12 @@
                     // Ennuste (forecast, 5 päivän)
                     const fRes = await fetch(`https://tabletti-saaa.talonen-dm.workers.dev/forecast?city=${encodeURIComponent(city)}`);
                     const fData = await fRes.json();
-                    const next3 = fData.list.slice(0, 3).map(x => `${x.dt_txt}: ${x.main.temp.toFixed(1)} °C`).join("<br>");
+                    const next3 = fData.list.slice(1, 6).map(x => `${x.dt_txt}: ${x.main.temp.toFixed(1)} °C`).join("<br>");
+                    // next skipped (0) but then 5 forecasts shown
                     //box.innerHTML += `<br><em>Ennuste:</em><br>${next3}`;
                     box.innerHTML += `<br>${next3}`;
-
+                    // slice(1,4) → aloitetaan toisesta listan alkiosta (≈ 3 h päästä) ja otetaan kolme seuraavaa ennustetta
+                    // dt-kenttä muutetaan selkeäksi kellonajaksi.
                     // Ilmanlaatu (air)
                     const lat = data.coord.lat, lon = data.coord.lon;
                     const aRes = await fetch(`https://tabletti-saaa.talonen-dm.workers.dev/air?lat=${lat}&lon=${lon}`);
@@ -299,7 +301,7 @@
         }
         fetchWeather();
         // setInterval(fetchWeather, 600000);
-        setInterval(fetchWeather, 15 * 60 * 1000); // 15 minuutin välein
+        setInterval(fetchWeather, 30 * 60 * 1000); // 30 minuutin välein
 
 
         /* -------------------- Uutiset (Yle RSS) -------------------- */
