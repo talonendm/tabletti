@@ -1,0 +1,26 @@
+{
+  "valid_from": "2025-08-12",
+  "valid_to": "2026-06-01",
+  "children": [
+    {
+      "name": "va",
+      "schedule": {
+        "monday": { "start": "08:15", "end": "13:45" },
+        "tuesday": { "start": "08:15", "end": "14:30" },
+        "wednesday": { "start": "08:15", "end": "13:00" },
+        "thursday": { "start": "08:15", "end": "14:30" },
+        "friday": { "start": "08:15", "end": "12:15" }
+      }
+    },
+    {
+      "name": "ve",
+      "schedule": {
+        "monday": { "start": "08:30", "end": "14:00" },
+        "tuesday": { "start": "08:30", "end": "13:15" },
+        "wednesday": { "start": "08:30", "end": "12:45" },
+        "thursday": { "start": "08:30", "end": "14:00" },
+        "friday": { "start": "08:30", "end": "12:00" }
+      }
+    }
+  ]
+}
