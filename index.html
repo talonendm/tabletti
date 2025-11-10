@@ -376,17 +376,7 @@
 
         // myös ensimmäinen kutsu
         requestWakeLock();
-
-
-
-
-        // Automaattinen iframe refresh
-        const keepIframe = document.getElementById("keepIframe");
-
-        setInterval(() => {
-            keepIframe.src = keepIframe.src.split("?")[0] + "?t=" + Date.now();
-        }, 2 * 60 * 1000); // 2 minuutin välein
-
+     
 
         // Pyydetään uudelleen, jos välilehti palautuu näkyviin
         document.addEventListener('visibilitychange', () => {
