@@ -110,8 +110,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 94%;
+            height: 94%;
             object-fit: cover;
             transition: opacity 0.6s;
         }
@@ -157,14 +157,13 @@
         /* HSL + koulu aikataulut vieretysten */
         .info-row {
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+            gap: 0.5rem;
             align-items: flex-start;
         }
 
         .info-card {
             flex: 1;
-            min-width: 200px;
+            min-width: 120px;
             background: var(--card);
             border-radius: 1rem;
             padding: 0.3rem 0.5rem;
@@ -214,32 +213,33 @@
 </head>
 
 <body>
-<header style="position:relative; height:3.5rem; display:flex; justify-content:center; align-items:center;">
+    <header style="position:relative; height:3.5rem; display:flex; justify-content:center; align-items:center;">
 
-  <!-- Vasemmalla: OpenWeather logo -->
-  <div style="position:absolute; left:0.5rem; top:50%; transform:translateY(-50%); font-size:0.7rem;">
-    Weather data provided by
-    <a href="https://openweathermap.org/" target="_blank" style="color:var(--accent); text-decoration:none;">
-      OpenWeather <img src="logoopenweather.png" alt="OpenWeatherMap" style="height:20px; vertical-align:middle;">
-    </a>
-  </div>
+        <!-- Vasemmalla: OpenWeather logo -->
+        <div style="position:absolute; left:0.5rem; top:50%; transform:translateY(-50%); font-size:0.7rem;">
+            Weather data provided by
+            <a href="https://openweathermap.org/" target="_blank" style="color:var(--accent); text-decoration:none;">
+                OpenWeather <img src="logoopenweather.png" alt="OpenWeatherMap"
+                    style="height:20px; vertical-align:middle;">
+            </a>
+        </div>
 
-  <!-- Keskellä: Otsikko + kello + note -->
-  <div style="display:flex; flex-direction:column; align-items:center; gap:0.2rem;">
-    <div style="font-weight:bold; font-size:1.6rem;">Keittiön tabletti</div>
-    <div style="display:flex; gap:1rem; font-size:0.9rem;">
-      <div id="clock"></div>
-      <div id="note"></div>
-    </div>
-  </div>
+        <!-- Keskellä: Otsikko + kello + note -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0.2rem;">
+            <div style="font-weight:bold; font-size:1.6rem;">Keittiön tabletti</div>
+            <div style="display:flex; gap:1rem; font-size:0.9rem;">
+                <div id="clock"></div>
+                <div id="note"></div>
+            </div>
+        </div>
 
-  <!-- Oikeassa yläkulmassa: Teeman vaihto nappi -->
-  <button id="themeToggle" title="Vaihda teema" 
-          style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%);">
-    🌙
-  </button>
+        <!-- Oikeassa yläkulmassa: Teeman vaihto nappi -->
+        <button id="themeToggle" title="Vaihda teema"
+            style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%);">
+            🌙
+        </button>
 
-</header>
+    </header>
 
 
 
@@ -251,18 +251,14 @@
 
     <section class="main-section" style="display:flex; gap:1rem; flex-wrap:wrap;">
         <!-- Vasemman puolen kuva -->
-        <div class="photo-box" style="flex:1; min-width:180px;">
+        <div class="photo-box" style="flex:1; min-width:120px;">
             <img id="photo" src="" alt="Kuva ladataan..." style="width:100%; height:auto; border-radius:1rem;">
         </div>
 
-        <!-- Oikean puolen info ja uutiset -->
-        <div class="news-box" style="flex:2; display:flex; flex-direction:column; gap:1rem;">
-
-            <!-- Korttirivi -->
-            <div class="info-row" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-
-                <!-- HSL -->
-                <div class="info-card" style="background:#a3c4f3; color:#111; flex:1 1 120px;">
+        <div class="news-box">
+            <div class="info-row">
+                <!-- HSL-kortti -->
+                <div class="info-card" style="background:#a3c4f3; color:#111;">
                     <ul>
                         <li><a href="https://reittiopas.hsl.fi/pysakit/HSL%3A6070227" target="_blank">Syväjärvi
                                 keskustaan</a></li>
@@ -275,31 +271,28 @@
                     </ul>
                 </div>
 
-                <!-- Kouluajat -->
-                <div class="info-card" style="background:#f7d794; color:#111; flex:1 1 80px;">
+                <!-- Kouluajat lapsille -->
+                <div class="info-card" style="background:#f7d794; color:#111;">
                     <h3>Va</h3>
                     <div id="vaSchedule">Ladataan...</div>
                 </div>
-                <div class="info-card" style="background:#c7ecee; color:#111; flex:1 1 80px;">
+                <div class="info-card" style="background:#c7ecee; color:#111;">
                     <h3>Ve</h3>
                     <div id="veSchedule">Ladataan...</div>
                 </div>
 
-                <!-- Google Docs / muistiot -->
-                <div class="info-card" style="background:#f1f2f6; color:#111; flex:1 1 220px;">
+                <!-- Google Docs -->
+                <div class="info-card" style="background:#f1f2f6; color:#111; min-width:250px; max-width:300px;">
                     <iframe
                         src="https://docs.google.com/document/d/e/2PACX-1vR2we_YLjOsGCL10VOvdcpTo3P2wGvWLFkXPsf5HWke2NmZnxr3WdzhCFfmYhhKTlRXdY3e06HhqeRL/pub?embedded=true"
-                        style="width:100%; height:120px; border:none; border-radius:0.8rem;">
-                    </iframe>
+                        style="width:100%; height:100px; border:none;"></iframe>
                 </div>
-
-            </div> <!-- info-row loppuu -->
+            </div>
 
             <!-- Uutiset -->
             <div id="newsList">Ladataan...</div>
-
-
         </div>
+
     </section>
 
 
@@ -442,73 +435,40 @@
         // setInterval(fetchWeather, 600000);
         setInterval(fetchWeather, 30 * 60 * 1000); // 30 minuutin välein
 
-
-        const SCHEDULE_DATA = {
-            "valid_from": "2025-08-12",
-            "valid_to": "2026-06-01",
-            "children": [
-                {
-                    "name": "va",
-                    "schedule": {
-                        "monday": { "start": "08:15", "end": "13:45" },
-                        "tuesday": { "start": "08:15", "end": "14:30" },
-                        "wednesday": { "start": "08:15", "end": "13:00" },
-                        "thursday": { "start": "08:15", "end": "14:30" },
-                        "friday": { "start": "08:15", "end": "12:15" }
-                    }
-                },
-                {
-                    "name": "ve",
-                    "schedule": {
-                        "monday": { "start": "08:30", "end": "14:00" },
-                        "tuesday": { "start": "08:30", "end": "13:15" },
-                        "wednesday": { "start": "08:30", "end": "12:45" },
-                        "thursday": { "start": "08:30", "end": "14:00" },
-                        "friday": { "start": "08:30", "end": "12:00" }
-                    }
-                }
-            ]
-        };
-
+        // -------------------- Kouluajat (aikataulu.json)
+        const scheduleUrl = "aikataulu.json";
+        let SCHEDULE_DATA = { children: [] };
+        async function loadScheduleData() {
+            try {
+                const res = await fetch(scheduleUrl + "?t=" + Date.now());
+                SCHEDULE_DATA = await res.json();
+                renderSchedules();
+                setInterval(renderSchedules, 5 * 60 * 1000);
+            } catch (e) {
+                console.error("Aikataulun lataus epäonnistui:", e);
+                document.getElementById("vaSchedule").textContent = "Ei saatavilla";
+                document.getElementById("veSchedule").textContent = "Ei saatavilla";
+            }
+        }
         function renderSchedules() {
             const today = new Date();
             const weekday = today.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
-
             SCHEDULE_DATA.children.forEach(child => {
-                const el = document.getElementById(`${child.name}Schedule`); // MUUTOS
-                if (!el) return; // jos elementti puuttuu, ohitetaan
-
+                const el = document.getElementById(`${child.name}Schedule`);
+                if (!el) return;
                 const times = child.schedule[weekday];
-                if (!times) {
-                    el.innerHTML = "Vapaapäivä";
-                    return;
-                }
+                if (!times) { el.innerHTML = "Vapaapäivä"; return; }
                 const nowMinutes = today.getHours() * 60 + today.getMinutes();
                 const startMinutes = parseInt(times.start.split(":")[0]) * 60 + parseInt(times.start.split(":")[1]);
                 const endMinutes = parseInt(times.end.split(":")[0]) * 60 + parseInt(times.end.split(":")[1]);
-
                 let status = "";
-                if (nowMinutes < startMinutes) {
-                    const diff = startMinutes - nowMinutes;
-                    status = `Lähtöön ${Math.floor(diff / 60)}h ${diff % 60}min`;
-                } else if (nowMinutes >= startMinutes && nowMinutes < endMinutes) {
-                    const diff = endMinutes - nowMinutes;
-                    status = `Koulussa (${Math.floor(diff / 60)}h ${diff % 60}min jäljellä)`;
-                } else {
-                    status = "Koulu ohi tältä päivältä";
-                }
-
-                el.innerHTML = `
-            ${times.start} – ${times.end}<br>
-            <em>${status}</em>
-        `;
+                if (nowMinutes < startMinutes) { const diff = startMinutes - nowMinutes; status = `Alkaa: ${Math.floor(diff / 60)}h ${diff % 60}min`; }
+                else if (nowMinutes >= startMinutes && nowMinutes < endMinutes) { const diff = endMinutes - nowMinutes; status = `Koulussa (${Math.floor(diff / 60)}h ${diff % 60}min jäljellä)`; }
+                else { status = "Koulu ohi tältä päivältä"; }
+                el.innerHTML = `${times.start} – ${times.end}<br><em>${status}</em>`;
             });
         }
-
-
-        renderSchedules();
-        setInterval(renderSchedules, 5 * 60 * 1000); // päivitys 5 min välein
-
+        loadScheduleData();
 
 
 
