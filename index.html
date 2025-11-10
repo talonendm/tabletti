@@ -93,28 +93,33 @@
             text-decoration: underline;
         }
 
-        /* Kuvaboksi */
         .photo-box {
             position: relative;
             width: 25%;
-            /* hieman kapeampi */
-            padding-top: calc(25% * var(--photo-scale));
-            /* korkeuden skaalaus suhteessa leveyteen */
+            padding-top: 25%;
+            /* 1:1 kuvasuhde */
             border-radius: 1rem;
             overflow: hidden;
             background: #000;
+            flex-shrink: 0;
+            /* estää venymisen flex-konteissa */
+            max-width: 25%;
+            /* turvaksi */
+            box-sizing: border-box;
         }
-
 
         .photo-box img {
             position: absolute;
             top: 0;
             left: 0;
-            width: 94%;
-            height: 94%;
+            width: 100%;
+            /* täyttää boxin */
+            height: 100%;
+            /* täyttää boxin */
             object-fit: cover;
             transition: opacity 0.6s;
         }
+
 
         #themeToggle {
             position: absolute;
