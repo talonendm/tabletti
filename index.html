@@ -95,15 +95,15 @@
 
         .photo-box {
             position: relative;
-            width: 25%;
-            padding-top: 25%;
+            width: 29%;
+            padding-top: 29%;
             /* 1:1 kuvasuhde */
             border-radius: 1rem;
             overflow: hidden;
             background: #000;
             flex-shrink: 0;
             /* estää venymisen flex-konteissa */
-            max-width: 25%;
+            max-width: 29%;
             /* turvaksi */
             box-sizing: border-box;
         }
@@ -118,6 +118,13 @@
             /* täyttää boxin */
             object-fit: cover;
             transition: opacity 0.6s;
+        }
+
+        .info-card.hsl {
+            background: #5a8fd3;
+            /* tummempi sininen */
+            color: #f5f5f5;
+            /* vaalea teksti */
         }
 
 
@@ -263,7 +270,7 @@
         <div class="news-box">
             <div class="info-row">
                 <!-- HSL-kortti -->
-                <div class="info-card" style="background:#a3c4f3; color:#111;">
+                <div class="info-card hsl">
                     <ul>
                         <li><a href="https://reittiopas.hsl.fi/pysakit/HSL%3A6070227" target="_blank">Syväjärvi
                                 keskustaan</a></li>
@@ -275,6 +282,7 @@
                                 juna-asema</a></li>
                     </ul>
                 </div>
+
 
                 <!-- Kouluajat lapsille -->
                 <div class="info-card" style="background:#f7d794; color:#111;">
