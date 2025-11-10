@@ -95,15 +95,15 @@
 
         .photo-box {
             position: relative;
-            width: 29%;
-            padding-top: 29%;
+            width: 27%;
+            padding-top: 27%;
             /* 1:1 kuvasuhde */
             border-radius: 1rem;
             overflow: hidden;
             background: #000;
             flex-shrink: 0;
             /* estää venymisen flex-konteissa */
-            max-width: 29%;
+            max-width: 27%;
             /* turvaksi */
             box-sizing: border-box;
         }
@@ -120,12 +120,7 @@
             transition: opacity 0.6s;
         }
 
-        .info-card.hsl {
-            background: #5a8fd3;
-            /* tummempi sininen */
-            color: #f5f5f5;
-            /* vaalea teksti */
-        }
+
 
 
         #themeToggle {
@@ -175,15 +170,49 @@
 
         .info-card {
             flex: 1;
-            min-width: 120px;
+            min-width: 110px;
             background: var(--card);
             border-radius: 1rem;
             padding: 0.3rem 0.5rem;
             /* pienempi padding */
         }
 
+
+        .info-card.hsl {
+            background: #5a8fd3;
+            /* tummempi sininen */
+            color: #f5f5f5;
+            border-radius: 1rem;
+            padding: 0.3rem 0.5rem;
+            /* vaalea teksti */
+        }
+
+        .info-card.docs {
+            flex-shrink: 0;
+            /* estää kutistumisen flex-konteissa */
+            max-height: 150px;
+            /* tarvittaessa säädä korkeus */
+            border-radius: 1rem;
+            padding: 0.3rem 0.5rem;
+        }
+
+        .info-card.docs iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .info-card h3 {
+            margin: 0 0 0.3rem 0;
+            /* yläreuna 0, ala vähän */
+            font-size: 1rem;
+            /* säädä tarpeen mukaan */
+        }
+
+
+
         #google-docs iframe {
-            border-radius: 0.5rem;
+            border-radius: 0.2rem;
         }
 
         @media (max-width: 1200px) {
@@ -295,7 +324,7 @@
                 </div>
 
                 <!-- Google Docs -->
-                <div class="info-card" style="background:#f1f2f6; color:#111; min-width:250px; max-width:300px;">
+                <div class="info-card docs" style="background:#f1f2f6; color:#111; min-width:250px; max-width:300px;">
                     <iframe
                         src="https://docs.google.com/document/d/e/2PACX-1vR2we_YLjOsGCL10VOvdcpTo3P2wGvWLFkXPsf5HWke2NmZnxr3WdzhCFfmYhhKTlRXdY3e06HhqeRL/pub?embedded=true"
                         style="width:100%; height:100px; border:none;"></iframe>
