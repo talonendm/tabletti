@@ -95,15 +95,15 @@
 
         .photo-box {
             position: relative;
-            width: 27%;
-            padding-top: 27%;
+            width: 26%;
+            padding-top: 26%;
             /* 1:1 kuvasuhde */
             border-radius: 1rem;
             overflow: hidden;
             background: #000;
             flex-shrink: 0;
             /* estää venymisen flex-konteissa */
-            max-width: 27%;
+            max-width: 26%;
             /* turvaksi */
             box-sizing: border-box;
         }
@@ -250,6 +250,37 @@
             flex-grow: 1;
             overflow-y: auto;
         }
+
+
+        #newsTicker {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            border-radius: 0.3rem;
+            background: var(--card-bg);
+            color: var(--fg);
+            padding: 0.5rem;
+            font-size: 2.0rem;
+            position: relative;
+            text-align: center;
+        }
+
+        #newsTicker span {
+            display: inline-block;
+            transition: opacity 0.5s ease;
+        }
+
+
+        @keyframes scrollNews {
+            0% {
+                transform: translateX(0%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
     </style>
 </head>
 
@@ -265,11 +296,12 @@
             </a>
 
 
-            
-    <a href="https://talonendm.github.io/tabletti/opi/en/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: bold;">
-      Opi-Englanti
-    </a>
-  
+
+            <a href="https://talonendm.github.io/tabletti/opi/en/" target="_blank"
+                style="color: var(--accent); text-decoration: none; font-weight: bold;">
+                Opi-Englanti
+            </a>
+
         </div>
 
 
@@ -353,6 +385,11 @@
 
     </section>
 
+    <section id="news">
+        <div id="newsTicker"><span>Ladataan uutisia…</span></div>
+    </section>
+
+
 
 
     <script>
@@ -386,7 +423,7 @@
 
         // myös ensimmäinen kutsu
         requestWakeLock();
-     
+
 
         // Pyydetään uudelleen, jos välilehti palautuu näkyviin
         document.addEventListener('visibilitychange', () => {
@@ -543,15 +580,16 @@
 
 
         /* -------------------- Uutiset (Yle RSS) -------------------- */
-        async function fetchRSS(rssUrl, name) {
+        async function fetchRSS2(rssUrl, name) {
             const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
             try {
                 const res = await fetch(url); const data = await res.json();
                 return `<h3>${name}</h3><ul>` + data.items.slice(0, 6).map(i => `<li><a href="${i.link}" target="_blank">${i.title}</a></li>`).join("") + "</ul>";
             } catch { return `<p>${name}: ei saatavilla</p>`; }
         }
+
         async function fetchNews() {
-            const yle = await fetchRSS("https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss", "Yle");
+            const yle = await fetchRSS2("https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss", "Yle");
             document.getElementById("newsList").innerHTML = yle;
         }
         fetchNews(); setInterval(fetchNews, 900000);
@@ -560,6 +598,44 @@
         document.addEventListener("DOMContentLoaded", () => {
             renderSchedules(); // tai loadSchedule()
         });
+
+
+
+        async function fetchRSS(rssUrl) {
+            const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                // Palautetaan lista otsikoista (vain teksti)
+                return data.items.slice(0, 10).map(i => i.title);
+            } catch {
+                return ["Uutiset eivät ole saatavilla"];
+            }
+        }
+
+
+        async function fetchNewsTicker() {
+            const yleTitles = await fetchRSS("https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss");
+            const tickerSpan = document.querySelector("#newsTicker span");
+
+            let i = 0;
+            function showNext() {
+                tickerSpan.style.opacity = 0;           // fade out
+                setTimeout(() => {
+                    tickerSpan.textContent = yleTitles[i % yleTitles.length];
+                    tickerSpan.style.opacity = 1;         // fade in
+                    i++;
+                    setTimeout(showNext, 5000);           // seuraava 5 sekunnin päästä
+                }, 500);
+            }
+
+            showNext();
+        }
+
+        fetchNewsTicker();
+        setInterval(fetchNewsTicker, 10 * 60 * 1000); // 10 minuutin välein ladataan uudet otsikot
+
+
 
     </script>
 
