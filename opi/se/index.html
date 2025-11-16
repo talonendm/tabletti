@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Flashcards – Verbit & Ruotsia</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header>
+  Flashcards – Verbit & Laivasanasto
+  <div id="clock"></div>
+  <div id="voiceToggleContainer">
+    Ääni:
+    <label>
+      <input type="checkbox" id="voiceToggle">
+      käytössä
+    </label>
+  </div>
+</header>
+
+<div id="cards">
+  <div class="card" id="cardA">
+    <div class="label" id="labelA"></div>
+    <div class="timer" id="timerA"></div>
+    <div id="contentA">Ladataan…</div>
+  </div>
+
+  <div class="card" id="cardB">
+    <div class="label" id="labelB"></div>
+    <div class="timer" id="timerB"></div>
+    <div id="contentB">Ladataan…</div>
+  </div>
+</div>
+
+<script>
+/* ── Teema & kello ── */
+function setTheme(){ const h=new Date().getHours(); document.body.classList.toggle("light",h>=8&&h<19);}
+setTheme(); setInterval(setTheme,600_000);
+
+function updateClock(){
+  document.getElementById("clock").textContent=
+    new Date().toLocaleString("fi-FI",{weekday:"short",hour:"2-digit",minute:"2-digit",second:"2-digit"});
+}
+setInterval(updateClock,1000); updateClock();
+
+/* ── Wake Lock ── */
+let wakeLock=null;
+async function requestWakeLock(){
+  try{
+    if("wakeLock" in navigator){
+      wakeLock=await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release",()=>console.log("Wake Lock vapautettu"));
+    }
+  }catch(e){console.warn("WakeLock ei käytettävissä:",e);}
+}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")requestWakeLock();}); 
+requestWakeLock();
+
+/* ── Ääni ── */
+let voiceEnabled=false;
+document.getElementById("voiceToggle").addEventListener("change",e=>voiceEnabled=e.target.checked);
+
+let voices = [];
+
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+  if (voices.length === 0) return; // ei ääniä vielä
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+function getSwedishFemaleVoice() {
+  // Etsi ruotsinkielinen naisääni
+  const svVoices = voices.filter(v => v.lang.startsWith("sv"));
+  if (svVoices.length === 0) return null;
+  
+  // Yritä löytää naisääni nimen perusteella (Chrome esim. "Samantha" ei toimi sv)
+  const female = svVoices.find(v => /female|kvinna/i.test(v.name));
+  return female || svVoices[0]; // jos ei löydy, ota ensimmäinen
+}
+
+function speak(text) {
+  if (!voiceEnabled || !window.speechSynthesis) return;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.95;
+  utterance.voice = getSwedishFemaleVoice();
+  utterance.lang = "sv-SE"; // pakota ruotsiksi
+
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+
+/* ── Flashcards ── */
+const cardA=document.getElementById("contentA"), cardB=document.getElementById("contentB");
+const labelA=document.getElementById("labelA"), labelB=document.getElementById("labelB");
+const timerAEl=document.getElementById("timerA"), timerBEl=document.getElementById("timerB");
+
+let verbs=[], sentences=[];
+let shuffledVerbs=[], shuffledsentences=[];
+let indexA=0, indexB=0;
+
+async function loadData(){
+  verbs=await (await fetch("verbs.json?t="+Date.now())).json();
+  sentences=await (await fetch("sentences.json?t="+Date.now())).json();
+  startLoops();
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+async function fadeText(card,text,label){
+  card.style.opacity=0;
+  await sleep(300);
+  card.textContent=text;
+  if(label) card.previousElementSibling.textContent=label;
+  card.style.opacity=1;
+}
+
+// Shuffle helper
+function shuffleArray(array){
+  const arr = array.slice();
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/* ── LOOP A: epäsäännölliset verbit ── */
+async function runLoopA(){
+  while(true){
+    if(indexA >= shuffledVerbs.length){
+      shuffledVerbs = shuffleArray(verbs);
+      indexA = 0;
+    }
+    const v = shuffledVerbs[indexA++];
+    
+    await fadeText(cardA,v.fi,"Suomeksi"); 
+    timerAEl.textContent="5s"; 
+    for(let t=4;t>=0;t--){await sleep(1000); timerAEl.textContent=t+"s";}
+
+    await fadeText(cardA,v.base,"Infinitiivi"); speak(v.base); timerAEl.textContent="2s"; await sleep(2000);
+    await fadeText(cardA,v.past,"Imperfekti"); speak(v.past); timerAEl.textContent="2s"; await sleep(2000);
+    await fadeText(cardA,v.part,"Partisiippi"); speak(v.part); timerAEl.textContent="2s"; await sleep(2000);
+    await fadeText(cardA,v.example,"Esimerkki"); speak(v.example); timerAEl.textContent="8s"; 
+    for(let t=7;t>=0;t--){await sleep(1000); timerAEl.textContent=t+"s";}
+  }
+}
+
+/* ── LOOP B: laivasanasto ── */
+async function runLoopB(){
+  while(true){
+    if(indexB >= shuffledsentences.length){
+      shuffledsentences = shuffleArray(sentences);
+      indexB = 0;
+    }
+    const s = shuffledsentences[indexB++];
+
+    await fadeText(cardB,s.en+" ("+s.fi+")","Laivasanasto");
+    timerBEl.textContent="13s"; for(let t=12;t>=0;t--){await sleep(1000); timerBEl.textContent=t+"s";}
+    await fadeText(cardB,s.example,"Esimerkki");
+    timerBEl.textContent="13s"; for(let t=12;t>=0;t--){await sleep(1000); timerBEl.textContent=t+"s";}
+  }
+}
+
+function startLoops(){
+  shuffledVerbs = shuffleArray(verbs);
+  shuffledsentences = shuffleArray(sentences);
+  indexA = 0; indexB = 0;
+  runLoopA();
+  runLoopB();
+}
+
+loadData();
+</script>
+</body>
+</html>

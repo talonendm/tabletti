@@ -1,0 +1,97 @@
+:root {
+  --bg: #111;
+  --fg: #ddd;
+  --card-bg-a: #1d1d1d; /* Card A color */
+  --card-bg-b: #2d1d3d; /* Card B color */
+  --accent: #5af;
+}
+
+body.light {
+  --bg: #f7f7f7;
+  --fg: #111;
+  --card-bg-a: #cce; /* Card A light mode */
+  --card-bg-b: #eec; /* Card B light mode */
+  --accent: rgb(6, 7, 7);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Remove the previous #clock styling if needed */
+#clock {
+  position: absolute; /* position it relative to the viewport */
+  top: 0.5rem;        /* distance from the top */
+  left: 0.5rem;       /* distance from the left */
+  font-size: 2rem;  /* make it larger */
+  font-weight: bold;  /* optional: make it stand out */
+  color: var(--accent); /* optional: accent color */
+  z-index: 1000;      /* ensure it’s above other elements */
+  opacity: 0.9;       /* slightly transparent if desired */
+}
+
+
+#voiceToggleContainer {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+}
+
+#cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 1;
+  padding: 0.5rem;
+}
+
+.card {
+  width: 90%;
+  max-width: 600px;
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 3rem;
+  transition: opacity 0.3s;
+  position: relative;
+}
+
+#cardA {
+  background: var(--card-bg-a);
+}
+
+#cardB {
+  background: var(--card-bg-b);
+}
+
+.label {
+  font-size: 1.2rem;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+
+.timer {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  font-size: 1.5rem;
+  opacity: 0.8;
+}
