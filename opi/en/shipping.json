@@ -1,0 +1,102 @@
+[
+  {
+    "fi": "runko",
+    "en": "hull",
+    "example": "The ship’s hull was reinforced for Arctic conditions."
+  },
+  {
+    "fi": "potkuri",
+    "en": "propeller",
+    "example": "The propeller was replaced during the maintenance stop."
+  },
+  {
+    "fi": "peräsin",
+    "en": "rudder",
+    "example": "The rudder allows the vessel to change direction."
+  },
+  {
+    "fi": "vetoisuus",
+    "en": "displacement",
+    "example": "The vessel’s displacement determines how much water it pushes aside."
+  },
+  {
+    "fi": "kölilinja",
+    "en": "keel line",
+    "example": "The keel line forms the backbone of the ship."
+  },
+  {
+    "fi": "lastikansi",
+    "en": "cargo deck",
+    "example": "Vehicles were loaded onto the cargo deck."
+  },
+  {
+    "fi": "komentosilta",
+    "en": "bridge",
+    "example": "Navigation is monitored from the ship’s bridge."
+  },
+  {
+    "fi": "ulkokansi",
+    "en": "outer deck",
+    "example": "Passengers gathered on the outer deck to enjoy the view."
+  },
+  {
+    "fi": "ankkuri",
+    "en": "anchor",
+    "example": "The crew lowered the anchor in the bay."
+  },
+  {
+    "fi": "luukku",
+    "en": "hatch",
+    "example": "The maintenance team inspected the engine room hatch."
+  },
+  {
+    "fi": "konehuone",
+    "en": "engine room",
+    "example": "The temperature in the engine room must be monitored constantly."
+  },
+  {
+    "fi": "keulapotkuri",
+    "en": "bow thruster",
+    "example": "The bow thruster helps the ship maneuver in tight harbors."
+  },
+  {
+    "fi": "peräpotkuri",
+    "en": "stern thruster",
+    "example": "The stern thruster was activated during docking."
+  },
+  {
+    "fi": "pääkone",
+    "en": "main engine",
+    "example": "The main engine was serviced after the long voyage."
+  },
+  {
+    "fi": "varakone",
+    "en": "auxiliary engine",
+    "example": "The auxiliary engine provides power for onboard systems."
+  },
+  {
+    "fi": "polttoainesäiliö",
+    "en": "fuel tank",
+    "example": "Fuel levels in the tank were checked before departure."
+  },
+  {
+    "fi": "nosturi",
+    "en": "crane",
+    "example": "The deck crane lifted the cargo containers aboard."
+  },
+  {
+    "fi": "painolasti",
+    "en": "ballast",
+    "example": "The crew adjusted the ballast to stabilize the ship."
+  },
+  {
+    "fi": "syväys",
+    "en": "draft",
+    "example": "The ship’s draft increased as cargo was loaded."
+  },
+  {
+    "fi": "hytti",
+    "en": "cabin",
+    "example": "Each crew member had their own cabin."
+  }
+]

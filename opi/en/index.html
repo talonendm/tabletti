@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Flashcards – Verbit & Laivasanasto</title>
+
+<style>
+:root {
+  --bg: #111;
+  --fg: #ddd;
+  --card-bg: #1d1d1d;
+  --accent: #5af;
+}
+body.light {
+  --bg: #f7f7f7;
+  --fg: #111;
+  --card-bg: #ddf;
+  --accent: rgb(6, 7, 7);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+#clock {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+#voiceToggleContainer {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+}
+
+#cards {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+  flex-grow: 1;
+  padding: 0.5rem;
+}
+
+.card {
+  width: 48%;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2rem;
+  transition: opacity 0.3s;
+  position: relative;
+}
+
+.label {
+  font-size: 1rem;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+
+.timer {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  Flashcards – Verbit & Laivasanasto
+  <div id="clock"></div>
+  <div id="voiceToggleContainer">
+    Ääni:
+    <label>
+      <input type="checkbox" id="voiceToggle" checked>
+      käytössä
+    </label>
+  </div>
+</header>
+
+<div id="cards">
+  <div class="card" id="cardA">
+    <div class="label" id="labelA"></div>
+    <div class="timer" id="timerA"></div>
+    <div id="contentA">Ladataan…</div>
+  </div>
+
+  <div class="card" id="cardB">
+    <div class="label" id="labelB"></div>
+    <div class="timer" id="timerB"></div>
+    <div id="contentB">Ladataan…</div>
+  </div>
+</div>
+
+<script>
+/* ── Teema & kello ── */
+function setTheme(){ const h=new Date().getHours(); document.body.classList.toggle("light",h>=8&&h<19);}
+setTheme(); setInterval(setTheme,600_000);
+
+function updateClock(){document.getElementById("clock").textContent=
+new Date().toLocaleString("fi-FI",{weekday:"short",hour:"2-digit",minute:"2-digit",second:"2-digit"});}
+setInterval(updateClock,1000); updateClock();
+
+/* ── Wake Lock ── */
+let wakeLock=null;
+async function requestWakeLock(){try{if("wakeLock"in navigator){wakeLock=await navigator.wakeLock.request("screen");wakeLock.addEventListener("release",()=>console.log("Wake Lock vapautettu"));}}catch(e){console.warn("WakeLock ei käytettävissä:",e);}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")requestWakeLock();}); requestWakeLock();
+
+/* ── Ääni ── */
+let voiceEnabled=true;
+document.getElementById("voiceToggle").addEventListener("change",e=>voiceEnabled=e.target.checked);
+function speak(text){if(!voiceEnabled||!window.speechSynthesis)return; const u=new SpeechSynthesisUtterance(text); u.lang="en-US"; u.rate=0.95; speechSynthesis.cancel(); speechSynthesis.speak(u);}
+
+/* ── Flashcards ── */
+const cardA=document.getElementById("contentA"),cardB=document.getElementById("contentB");
+const labelA=document.getElementById("labelA"),labelB=document.getElementById("labelB");
+const timerAEl=document.getElementById("timerA"),timerBEl=document.getElementById("timerB");
+
+let verbs=[], shipping=[];
+async function loadData(){
+  verbs=await (await fetch("verbs.json?t="+Date.now())).json();
+  shipping=await (await fetch("shipping.json?t="+Date.now())).json();
+  startLoops();
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+async function fadeText(card,text,label){card.style.opacity=0; await sleep(300); card.textContent=text; label&&(card.previousElementSibling.textContent=label); card.style.opacity=1;}
+
+/* ── LOOP A: epäsäännölliset verbit ── */
+async function runLoopA(){
+  let i=0;
+  while(true){
+    const v=verbs[i%verbs.length];
+    await fadeText(cardA,v.fi,"Suomeksi"); timerAEl.textContent="5s"; for(let t=4;t>=0;t--){await sleep(1000); timerAEl.textContent=t+"s";}
+    await fadeText(cardA,v.base,"Infinitiivi"); speak(v.base); timerAEl.textContent="1s"; await sleep(1000);
+    await fadeText(cardA,v.past,"Imperfekti"); speak(v.past); timerAEl.textContent="1s"; await sleep(1000);
+    await fadeText(cardA,v.part,"Partisiippi"); speak(v.part); timerAEl.textContent="1s"; await sleep(1000);
+    await fadeText(cardA,v.example,"Esimerkki"); speak(v.example); timerAEl.textContent="8s"; for(let t=7;t>=0;t--){await sleep(1000); timerAEl.textContent=t+"s";}
+    i++;
+  }
+}
+
+/* ── LOOP B: laivasanasto ── */
+async function runLoopB(){
+  let i=0;
+  while(true){
+    const s=shipping[i%shipping.length];
+    await fadeText(cardB,s.en+" ("+s.fi+")","Laivasanasto");
+    timerBEl.textContent="13s"; for(let t=12;t>=0;t--){await sleep(1000); timerBEl.textContent=t+"s";}
+    await fadeText(cardB,s.example,"Esimerkki"); timerBEl.textContent="13s"; for(let t=29;t>=0;t--){await sleep(1000); timerBEl.textContent=t+"s";}
+    i++;
+  }
+}
+
+function startLoops(){runLoopA(); runLoopB();}
+loadData();
+</script>
+</body>
+</html>
