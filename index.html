@@ -95,15 +95,15 @@
 
         .photo-box {
             position: relative;
-            width: 26%;
-            padding-top: 26%;
+            width: 24%;
+            padding-top: 24%;
             /* 1:1 kuvasuhde */
             border-radius: 1rem;
             overflow: hidden;
             background: #000;
             flex-shrink: 0;
             /* estää venymisen flex-konteissa */
-            max-width: 26%;
+            max-width: 24%;
             /* turvaksi */
             box-sizing: border-box;
         }
@@ -156,15 +156,15 @@
             flex: 1;
             min-width: 120px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 0.8rem;
-            padding: 0.5rem;
+            border-radius: 0.3rem;
+            padding: 0.1rem;
             text-align: center;
         }
 
         /* HSL + koulu aikataulut vieretysten */
         .info-row {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.1rem;
             align-items: flex-start;
         }
 
@@ -252,24 +252,24 @@
         }
 
 
-        #newsTicker {
+        .ticker-container {
             width: 100%;
             overflow: hidden;
             white-space: nowrap;
-            box-sizing: border-box;
-            border-radius: 0.3rem;
-            background: var(--card-bg);
-            color: var(--fg);
+            background: #222;
+            color: #fff;
             padding: 0.5rem;
-            font-size: 2.0rem;
-            position: relative;
-            text-align: center;
+            font-size: 2rem;
+            /* adjust font size */
+            box-sizing: border-box;
         }
 
-        #newsTicker span {
+        .ticker-content {
             display: inline-block;
-            transition: opacity 0.5s ease;
+            white-space: nowrap;
+            will-change: transform;
         }
+
 
 
         @keyframes scrollNews {
@@ -376,19 +376,14 @@
 
 
 
-            </div>
 
-
-            <!-- Uutiset -->
-            <div id="newsList">Ladataan...</div>
-        </div>
 
     </section>
 
-    <section id="news">
-        <div id="newsTicker"><span>Ladataan uutisia…</span></div>
-    </section>
 
+    <div class="ticker-container">
+        <div class="ticker-content">Ladataan…</div>
+    </div>
 
 
 
@@ -577,66 +572,54 @@
         }
         loadScheduleData();
 
-
-
-        /* -------------------- Uutiset (Yle RSS) -------------------- */
-        async function fetchRSS2(rssUrl, name) {
-            const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-            try {
-                const res = await fetch(url); const data = await res.json();
-                return `<h3>${name}</h3><ul>` + data.items.slice(0, 6).map(i => `<li><a href="${i.link}" target="_blank">${i.title}</a></li>`).join("") + "</ul>";
-            } catch { return `<p>${name}: ei saatavilla</p>`; }
-        }
-
-        async function fetchNews() {
-            const yle = await fetchRSS2("https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss", "Yle");
-            document.getElementById("newsList").innerHTML = yle;
-        }
-        fetchNews(); setInterval(fetchNews, 900000);
-
-
         document.addEventListener("DOMContentLoaded", () => {
             renderSchedules(); // tai loadSchedule()
         });
 
-
-
-        async function fetchRSS(rssUrl) {
-            const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+        /* -------------------- Uutiset (Yle RSS) -------------------- */
+        async function fetchNewsTitles() {
+            const url = "https://api.rss2json.com/v1/api.json?rss_url=https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss";
             try {
                 const res = await fetch(url);
                 const data = await res.json();
-                // Palautetaan lista otsikoista (vain teksti)
-                return data.items.slice(0, 10).map(i => i.title);
+                return data.items.slice(0, 20).map(i => i.title);
             } catch {
                 return ["Uutiset eivät ole saatavilla"];
             }
         }
 
+        let tickerAnimation = null;
 
-        async function fetchNewsTicker() {
-            const yleTitles = await fetchRSS("https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss");
-            const tickerSpan = document.querySelector("#newsTicker span");
+        async function initTicker() {
+            const ticker = document.querySelector(".ticker-content");
+            ticker.textContent = "Ladataan…";
 
-            let i = 0;
-            function showNext() {
-                tickerSpan.style.opacity = 0;           // fade out
-                setTimeout(() => {
-                    tickerSpan.textContent = yleTitles[i % yleTitles.length];
-                    tickerSpan.style.opacity = 1;         // fade in
-                    i++;
-                    setTimeout(showNext, 5000);           // seuraava 5 sekunnin päästä
-                }, 500);
-            }
+            const titles = await fetchNewsTitles();
+            ticker.textContent = titles.join(" — "); // update after fetch
 
-            showNext();
+            // cancel previous animation if exists
+            if (tickerAnimation) cancelAnimationFrame(tickerAnimation);
+
+            scrollTicker(ticker);
         }
 
-        fetchNewsTicker();
-        setInterval(fetchNewsTicker, 10 * 60 * 1000); // 10 minuutin välein ladataan uudet otsikot
+        function scrollTicker(el) {
+            let pos = el.parentElement.offsetWidth;
+            const speed = 2; // pixels per frame
 
+            function step() {
+                pos -= speed;
+                if (-pos > el.scrollWidth) pos = el.parentElement.offsetWidth;
+                el.style.transform = `translateX(${pos}px)`;
+                tickerAnimation = requestAnimationFrame(step);
+            }
 
+            step();
+        }
 
+        // Initialize once and refresh every 10 minutes
+        initTicker();
+        setInterval(initTicker, 10 * 60 * 1000);
     </script>
 
 

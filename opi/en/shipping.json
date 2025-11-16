@@ -2,101 +2,246 @@
   {
     "fi": "runko",
     "en": "hull",
-    "example": "The ship’s hull was reinforced for Arctic conditions."
+    "example": "The ship’s hull was reinforced for Arctic conditions to withstand ice collisions."
   },
   {
     "fi": "potkuri",
     "en": "propeller",
-    "example": "The propeller was replaced during the maintenance stop."
+    "example": "The propeller was replaced during the maintenance stop to improve fuel efficiency."
   },
   {
     "fi": "peräsin",
     "en": "rudder",
-    "example": "The rudder allows the vessel to change direction."
+    "example": "The rudder allows the vessel to change direction with minimal hydrodynamic resistance."
   },
   {
     "fi": "vetoisuus",
     "en": "displacement",
-    "example": "The vessel’s displacement determines how much water it pushes aside."
+    "example": "The vessel’s displacement determines its stability and cargo capacity under different load conditions."
   },
   {
     "fi": "kölilinja",
     "en": "keel line",
-    "example": "The keel line forms the backbone of the ship."
+    "example": "The keel line forms the backbone of the ship and ensures proper longitudinal strength."
   },
   {
     "fi": "lastikansi",
     "en": "cargo deck",
-    "example": "Vehicles were loaded onto the cargo deck."
+    "example": "Vehicles and containers were carefully positioned on the cargo deck to maintain balance."
   },
   {
     "fi": "komentosilta",
     "en": "bridge",
-    "example": "Navigation is monitored from the ship’s bridge."
+    "example": "Navigation and ship control are monitored from the bridge, where all critical instruments are located."
   },
   {
     "fi": "ulkokansi",
     "en": "outer deck",
-    "example": "Passengers gathered on the outer deck to enjoy the view."
+    "example": "Passengers gathered on the outer deck to observe the coastline while the vessel sailed at high speed."
   },
   {
     "fi": "ankkuri",
     "en": "anchor",
-    "example": "The crew lowered the anchor in the bay."
+    "example": "The crew lowered the anchor in the bay to prevent the ship from drifting during the storm."
   },
   {
     "fi": "luukku",
     "en": "hatch",
-    "example": "The maintenance team inspected the engine room hatch."
+    "example": "The engine room hatch was securely fastened to prevent flooding in rough seas."
   },
   {
     "fi": "konehuone",
     "en": "engine room",
-    "example": "The temperature in the engine room must be monitored constantly."
+    "example": "Engine room temperature and pressure gauges must be continuously monitored to avoid mechanical failures."
   },
   {
     "fi": "keulapotkuri",
     "en": "bow thruster",
-    "example": "The bow thruster helps the ship maneuver in tight harbors."
+    "example": "The bow thruster was activated to assist the vessel in docking safely amid strong currents."
   },
   {
     "fi": "peräpotkuri",
     "en": "stern thruster",
-    "example": "The stern thruster was activated during docking."
+    "example": "Using the stern thruster, the captain maneuvered the ship precisely between the narrow piers."
   },
   {
     "fi": "pääkone",
     "en": "main engine",
-    "example": "The main engine was serviced after the long voyage."
+    "example": "The main engine was overhauled after 10,000 hours of continuous operation."
   },
   {
     "fi": "varakone",
     "en": "auxiliary engine",
-    "example": "The auxiliary engine provides power for onboard systems."
+    "example": "The auxiliary engine supplies electrical power to the ship while the main engine is offline."
   },
   {
     "fi": "polttoainesäiliö",
     "en": "fuel tank",
-    "example": "Fuel levels in the tank were checked before departure."
+    "example": "Fuel levels in the tank were carefully measured to ensure enough range for the transatlantic voyage."
   },
   {
     "fi": "nosturi",
     "en": "crane",
-    "example": "The deck crane lifted the cargo containers aboard."
+    "example": "The deck crane lifted heavy shipping containers from the dock onto the vessel with precision."
   },
   {
     "fi": "painolasti",
     "en": "ballast",
-    "example": "The crew adjusted the ballast to stabilize the ship."
+    "example": "Ballast water was adjusted to improve the ship’s trim and prevent excessive rolling."
   },
   {
     "fi": "syväys",
     "en": "draft",
-    "example": "The ship’s draft increased as cargo was loaded."
+    "example": "The ship’s draft increased after loading the cargo, requiring careful monitoring to avoid shallow waters."
   },
   {
     "fi": "hytti",
     "en": "cabin",
-    "example": "Each crew member had their own cabin."
+    "example": "Each crew member had a private cabin equipped with safety features and communication systems."
+  },
+  {
+    "fi": "säiliöalusta",
+    "en": "tanker",
+    "example": "The tanker transported crude oil across the ocean, adhering strictly to international safety regulations."
+  },
+  {
+    "fi": "kontti",
+    "en": "container",
+    "example": "Each container was sealed and inspected to ensure no hazardous materials were onboard."
+  },
+  {
+    "fi": "nostokurki",
+    "en": "gantry crane",
+    "example": "The gantry crane lifted massive containers from the dock with millimeter precision."
+  },
+  {
+    "fi": "kompassi",
+    "en": "compass",
+    "example": "The captain checked the compass frequently to maintain the correct course during foggy conditions."
+  },
+  {
+    "fi": "laivan keula",
+    "en": "bow",
+    "example": "The bow of the vessel cut through the waves smoothly, reducing drag and fuel consumption."
+  },
+  {
+    "fi": "laivan perä",
+    "en": "stern",
+    "example": "The stern houses the steering gear and propeller mechanisms, vital for maneuvering."
+  },
+  {
+    "fi": "tankerointiputki",
+    "en": "loading arm",
+    "example": "The loading arm was securely attached to transfer the fuel from shore to the tanker safely."
+  },
+  {
+    "fi": "turvaporras",
+    "en": "gangway",
+    "example": "The gangway was raised during rough weather to prevent crew injuries."
+  },
+  {
+    "fi": "merikartta",
+    "en": "nautical chart",
+    "example": "The captain consulted the nautical chart before entering the narrow harbor."
+  },
+  {
+    "fi": "radar",
+    "en": "radar",
+    "example": "Radar was used to detect nearby vessels and avoid collisions in dense fog."
+  },
+  {
+    "fi": "autopilotti",
+    "en": "autopilot",
+    "example": "The autopilot maintained a steady course while the crew focused on cargo operations."
+  },
+  {
+    "fi": "venttiili",
+    "en": "valve",
+    "example": "The engineer adjusted the valve to control the fuel flow to the main engine."
+  },
+  {
+    "fi": "savupiippu",
+    "en": "smokestack",
+    "example": "The smokestack emitted steam and exhaust gases from the vessel’s engine room."
+  },
+  {
+    "fi": "meripelastusalus",
+    "en": "lifeboat",
+    "example": "The lifeboat was lowered carefully during the emergency drill to ensure crew safety."
+  },
+  {
+    "fi": "tuulilippu",
+    "en": "windsock",
+    "example": "The windsock on deck indicated the wind direction for docking maneuvers."
+  },
+  {
+    "fi": "ilmanottoaukko",
+    "en": "air vent",
+    "example": "The air vent prevented overheating in the engine room during prolonged operation."
+  },
+  {
+    "fi": "vesitiivis luukku",
+    "en": "watertight hatch",
+    "example": "The watertight hatch was secured to prevent flooding during rough seas."
+  },
+  {
+    "fi": "tukivarsi",
+    "en": "strut",
+    "example": "The strut supported the upper deck and maintained structural integrity."
+  },
+  {
+    "fi": "nostoköysi",
+    "en": "hoist rope",
+    "example": "The hoist rope was tested under load before lifting cargo containers."
+  },
+  {
+    "fi": "puomilaitteisto",
+    "en": "boom",
+    "example": "The boom was extended to facilitate loading of oversized cargo."
+  },
+  {
+    "fi": "hydraulijärjestelmä",
+    "en": "hydraulic system",
+    "example": "The hydraulic system powered the deck cranes and assisted in steering the rudder."
+  },
+  {
+    "fi": "anemometri",
+    "en": "anemometer",
+    "example": "The anemometer measured wind speed to adjust sails and navigation equipment."
+  },
+  {
+    "fi": "syväyksen mittari",
+    "en": "draft gauge",
+    "example": "The draft gauge indicated the ship’s immersion to prevent grounding in shallow areas."
+  },
+  {
+    "fi": "ohjausjärjestelmä",
+    "en": "steering system",
+    "example": "The steering system was regularly checked to ensure precise maneuverability in tight ports."
+  },
+  {
+    "fi": "aluksen tunniste",
+    "en": "ship identification number",
+    "example": "The ship identification number was recorded in the maritime registry for safety compliance."
+  },
+  {
+    "fi": "meripelastusrengas",
+    "en": "life buoy",
+    "example": "A life buoy was thrown to the crew member who fell overboard."
+  },
+  {
+    "fi": "vakavuusmittari",
+    "en": "stability meter",
+    "example": "The stability meter helped ensure cargo distribution maintained the ship’s equilibrium."
+  },
+  {
+    "fi": "lastiruuma",
+    "en": "cargo hold",
+    "example": "The cargo hold was inspected to ensure no water ingress before sealing it for the voyage."
+  },
+  {
+    "fi": "kompassiruusu",
+    "en": "compass rose",
+    "example": "The compass rose on the chart indicated true north and magnetic deviation."
   }
 ]
