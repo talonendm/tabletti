@@ -189,3 +189,8 @@ setInterval(setTheme, 10 * 60 * 1000);
 📌 Huomioita
 
 Wake Lock toimii vain aktiivisessa ja näkyvässä välilehdessä.Manuaalinen teema tallentuu vain sessioksi (voi halutessa lisätä localStorage-tuen). Vanhemmissa tableteissa voi olla rajoituksia Wake Lockin käytölle, joten näyttö kannattaa tarvittaessa laittaa "ei koskaan sammuvaksi" asetuksista.
+
+# Tips
+
+- Clear cache: Hard refresh / force reload: usein Ctrl+Shift+R (Windows)
+  - eli jos esim sw.js tallentaa cacheen ja ei näy muutokset. Tai käytä Incognito / Private -ikkunaa, siellä ei ole vanhaa cachea.

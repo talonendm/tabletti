@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f1720">
+
 <title>Multi-timer – Keittiön tabletti</title>
 
 <style>
@@ -51,15 +54,44 @@ html,body{
   display:flex; justify-content:space-between; align-items:center;
 }
 #closeSettings{font-size:1.6rem; background:none; border:none; color:var(--fg); cursor:pointer;}
-.settings-group{margin-top:18px; font-size:1.2rem;}
+.settings-group {
+  margin-top: 18px;
+  font-size: 1.2rem;
+  width: 100%;        /* täyttää panelin leveydestä */
+  max-width: 240px;   /* ettei mene liian leveäksi */
+  box-sizing: border-box; /* padding lasketaan mukaan */
+}
 .settings-group input[type="number"]{width:100%; font-size:1.3rem; padding:8px; border-radius:6px; border:1px solid #fff3; background:#0003; color:var(--fg);}
 .settings-group input[type="checkbox"]{transform:scale(1.2); margin-right:6px;}
+
+
+
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0004;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid #ffffff22;
+  width: 100%; /* täyttää .settings-group */
+  box-sizing: border-box;
+}
+
+.stepper-value {
+  width: auto;       /* ei pakota liian leveäksi */
+  min-width: 40px;   /* näkyy selkeästi */
+  text-align: center;
+  font-size: 1.6rem;
+}
+
 
 .center{flex:1; display:flex; align-items:center; justify-content:center; position:relative;}
 .circle{position:relative; background:var(--card); border-radius:50%;}
 
 .timer{
-  position:absolute; width:180px; height:180px; border-radius:50%;
+  position:absolute; width:160px; height:160px; border-radius:50%;
   background:rgba(255,255,255,0.12);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   color:var(--fg); padding:6px; text-align:center; cursor:pointer;
@@ -92,9 +124,14 @@ html,body{
 <div id="settingsPanel">
   <div class="settings-header">Asetukset <button id="closeSettings">✕</button></div>
   <div class="settings-group">
-    <label>Ajastimien määrä</label>
-    <input id="timerCountInput" type="number" min="2" max="8">
+  <label>Ajastimien määrä</label>
+
+  <div class="stepper">
+    <button class="stepper-btn" id="minusBtn">−</button>
+    <div class="stepper-value" id="timerCountDisplay">4</div>
+    <button class="stepper-btn" id="plusBtn">+</button>
   </div>
+</div>
   <div class="settings-group">
     <label><input id="tiltLockInput" type="checkbox"> Pakota vaakasuunta</label>
   </div>
@@ -232,21 +269,97 @@ function updateButton(i){
 const panel=document.getElementById("settingsPanel");
 const btnOpen=document.getElementById("openSettingsBtn");
 const btnClose=document.getElementById("closeSettings");
-const timerCountInput=document.getElementById("timerCountInput");
+// const timerCountInput=document.getElementById("timerCountInput");
 const tiltLockInput=document.getElementById("tiltLockInput");
 const wakeLockInput=document.getElementById("wakeLockInput");
 
-btnOpen.onclick=()=>{ panel.classList.add("open"); timerCountInput.value=state.timerCount; tiltLockInput.checked=state.tiltLock; wakeLockInput.checked=state.wakeLockEnabled; };
+btnOpen.onclick=()=>{ panel.classList.add("open"); updateTimerCountDisplay(); tiltLockInput.checked=state.tiltLock; wakeLockInput.checked=state.wakeLockEnabled; };
 btnClose.onclick=()=>panel.classList.remove("open");
-timerCountInput.onchange=()=>{ let v=Math.min(8,Math.max(2,parseInt(timerCountInput.value))); state.timerCount=v; initTimers(v); renderTimers(); };
+// timerCountInput.onchange=()=>{ let v=Math.min(8,Math.max(2,parseInt(timerCountInput.value))); state.timerCount=v; initTimers(v); renderTimers(); };
 tiltLockInput.onchange=()=>state.tiltLock=tiltLockInput.checked;
 wakeLockInput.onchange=()=>state.wakeLockEnabled=wakeLockInput.checked;
+
+const minusBtn = document.getElementById("minusBtn"); const plusBtn = document.getElementById("plusBtn"); const timerCountDisplay = document.getElementById("timerCountDisplay"); function updateTimerCountDisplay() { timerCountDisplay.textContent = state.timerCount; } // painikkeet 
+// 
+minusBtn.onclick = () => { if (state.timerCount > 2) { state.timerCount--; initTimers(state.timerCount); renderTimers(); updateTimerCountDisplay(); } }; plusBtn.onclick = () => { if (state.timerCount < 8) { state.timerCount++; initTimers(state.timerCount); renderTimers(); updateTimerCountDisplay(); } }; 
+// päivitä kun asetukset-paneeli avataan 
+// 
+
+btnOpen.onclick = () => { panel.classList.add("open"); updateTimerCountDisplay(); tiltLockInput.checked = state.tiltLock; wakeLockInput.checked = state.wakeLockEnabled; };
+
+
+
+
+
+
+/* ---------------- FULLSCREEN + WAKE LOCK ---------------- */
+let wakeLock = null;
+let wakeLockActivated = false;
+
+async function enableWakeLock() {
+    try {
+        wakeLock = await navigator.wakeLock.request("screen");
+
+        wakeLock.addEventListener("release", () => {
+            console.log("Wake Lock vapautui... yritetään uudelleen");
+        });
+
+        console.log("Wake Lock päällä");
+    } catch (err) {
+        console.warn("Wake Lock epäonnistui:", err);
+    }
+}
+
+// Jos näyttö sammuisi normaalisti → otetaan taas kiinni
+document.addEventListener("visibilitychange", () => {
+    if (wakeLock !== null && document.visibilityState === "visible") {
+        enableWakeLock();
+    }
+});
+
+/* ------ Fullscreen ------- */
+async function enableFullscreen() {
+    const el = document.documentElement;
+    if (!document.fullscreenElement) {
+        try {
+            await el.requestFullscreen();
+        } catch (e) {
+            console.warn("Fullscreen ei onnistunut:", e);
+        }
+    }
+}
+
+/* ------ Aktivoi molemmat ensimmäisestä käyttäjän kosketuksesta ------ */
+function setupAutoWakeAndFullscreen() {
+    const activate = () => {
+        if (!wakeLockActivated) {
+            enableWakeLock();
+            enableFullscreen();
+            wakeLockActivated = true;
+        }
+    };
+
+    document.addEventListener("click", activate, { once: true });
+    document.addEventListener("touchstart", activate, { once: true });
+}
+
+setupAutoWakeAndFullscreen();
+
 
 /* INIT */
 initTimers(state.timerCount);
 renderTimers();
 updateTimersDisplay();
 window.onresize=renderTimers;
+
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+
+
 </script>
 </body>
 </html>
