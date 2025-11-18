@@ -1,0 +1,64 @@
+:root{
+  --bg:#f7f7fb;
+  --card:#ffffff;
+  --muted:#666;
+  --accent:#111;
+  --shadow:0 6px 14px rgba(20,20,50,0.06);
+  --radius:10px;
+}
+/* Global layout */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--accent);display:flex;flex-direction:column}
+header{background:var(--card);padding:14px 20px;border-bottom:1px solid #eee;box-shadow:var(--shadow)}
+main{padding:18px;flex:1;overflow:auto}
+h1{margin:0;font-size:1.25rem}
+
+/* Controls */
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{background:var(--card);border:1px solid #ddd;padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600}
+button:active{transform:translateY(1px)}
+select{padding:6px;border-radius:8px;border:1px solid #ddd}
+.status{font-size:.9rem;color:#2b7a2b}
+
+/* Cards */
+.wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.chord-card{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);width:320px}
+.chord-title{font-weight:700;margin-bottom:6px}
+.fretboard {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.chord-card {
+  flex: 1 1 320px;  /* kasvaa vapaasti, mutta vähintään 320px */
+  max-width: 600px; /* haluttu maksimi */
+  min-width: 480px; /* ei mene liian pieneksi */
+}
+
+
+.meta{font-size:.95rem;color:var(--muted);margin-top:8px}
+.small{font-size:.85rem;color:var(--muted)}
+.credits{font-size:.85rem;color:var(--muted);margin-top:14px}
+
+/* Fullscreen tweaks */
+:fullscreen main{padding:28px}
+:fullscreen .chord-card{width:380px}
+
+/* Responsive */
+@media (max-width:1200px){
+  .chord-card{width:46%}
+}
+@media (max-width:900px){
+  .chord-card{width:100%}
+  header h1{font-size:2rem}
+  .controls{gap:8px}
+}
+
+/* Dark-mode support (prefers-color-scheme) */
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0b0c0f;--card:#0f1316;--muted:#9aa0a6;--accent:#eef2f3}
+  header{border-bottom-color:#0e0f11}
+  button{border-color:#1a1b1d}
+  .chord-card{box-shadow:0 8px 22px rgba(0,0,0,0.6)}
+}

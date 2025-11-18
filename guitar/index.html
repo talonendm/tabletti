@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="fi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Kitara — sointigeneraattori</title>
+    <meta name="theme-color" content="#ffffff">
+    <link id="manifest-link" rel="manifest">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Kitara — sointigeneraattori</h1>
+    </header>
+
+    <main>
+        <div class="controls">
+            <button id="newBtn">Näytä satunnaiset soinnut</button>
+            <button id="swapBtn">Sekoita (vain toinen vaihtuu)</button>
+            <button id="fullscreenBtn">Avaa koko näyttö & pidä näyttö päällä</button>
+
+            <label class="small">
+                Näytä:
+                <select id="filter">
+                    <option value="all">Kaikki</option>
+                    <option value="open">Avoimet</option>
+                    <option value="barre">Barre</option>
+                    <option value="seventh">7- soinnut</option>
+                </select>
+            </label>
+
+            <div id="wakeStatus" class="status" aria-live="polite"></div>
+        </div>
+
+        <div class="wrap" id="cards"></div>
+
+        <div class="credits">
+            Sointikuvat sisältävät yleisimmät avoimet ja barre-soinnut sekä 7-, m7-, sus- ja power-sointuja.
+        </div>
+    </main>
+
+    <script>
+        let chordsData = [];
+
+        // Muunna fingers (x32010) → positions [fret6, fret5, ..., fret1]
+        function convertFingersToPositions(fingers) {
+            return fingers.split("").map(f => f === "x" || f === "X" ? -1 : parseInt(f, 10));
+        }
+
+        // Lataa soinnut ulkoisesta JSON:sta
+        fetch('chords.json')
+            .then(r => r.json())
+            .then(d => {
+                chordsData = d.chords.map(ch => ({
+                    ...ch,
+                    positions: convertFingersToPositions(ch.fingers)
+                }));
+                showTwo(true);
+            });
+
+        const cards = document.getElementById('cards');
+        const newBtn = document.getElementById('newBtn');
+        const swapBtn = document.getElementById('swapBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const filterSelect = document.getElementById('filter');
+        const wakeStatus = document.getElementById('wakeStatus');
+
+        // Wake lock
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try {
+                if ("wakeLock" in navigator) {
+                    wakeLock = await navigator.wakeLock.request("screen");
+                    wakeStatus.textContent = "Näyttö lukittu päälle";
+                    wakeLock.addEventListener("release", () => { wakeStatus.textContent = "Näyttö ei ole lukittu"; wakeLock = null; });
+                } else wakeStatus.textContent = "Wake Lock ei tuettu selaimessa";
+            } catch (e) { wakeStatus.textContent = "Wake Lock epäonnistui"; }
+        }
+        async function releaseWakeLock() { if (wakeLock) { await wakeLock.release(); wakeLock = null; } }
+        document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && wakeLock === null) requestWakeLock(); });
+        fullscreenBtn.addEventListener("click", async () => {
+            if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+            await requestWakeLock();
+        });
+
+        // PWA manifest
+        const manifest = {
+            name: "Kitara — sointigeneraattori",
+            short_name: "Sointigeneraattori",
+            start_url: ".",
+            display: "fullscreen",
+            background_color: "#ffffff",
+            theme_color: "#ffffff",
+            icons: [
+                { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
+                { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" }
+            ]
+        };
+        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+        document.getElementById("manifest-link").href = URL.createObjectURL(manifestBlob);
+
+        // Filter
+        function filterList(filter) {
+            if (filter === "all") return chordsData;
+            if (filter === "open") return chordsData.filter(c => !c.barre && c.positions.some(p => p <= 5));
+            if (filter === "barre") return chordsData.filter(c => c.barre || c.positions.some(p => p > 4));
+            if (filter === "seventh") return chordsData.filter(c => c.type === "seventh" || (c.type && c.type.includes("7")));
+            return chordsData;
+        }
+
+        // Draw fretboard
+        function drawFretboard(ch) {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, "svg");
+            const W = 120, H = 70;
+            svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+            svg.setAttribute("preserveAspectRatio", "xMidYMid meet"); // säilyttää mittasuhteen ja keskittää
+            svg.classList.add("fretboard");
+
+
+            const left = 15, right = 105, top = 10, bottom = 60;
+            const strings = 6, frets = 5;
+            const sx = (right - left) / (strings - 1), fy = (bottom - top) / frets;
+
+            // Strings
+            for (let i = 0; i < strings; i++) {
+                const x = left + i * sx;
+                const line = document.createElementNS(svgNS, 'line');
+                line.setAttribute("x1", x);
+                line.setAttribute("y1", top);
+                line.setAttribute("x2", x);
+                line.setAttribute("y2", bottom);
+                line.setAttribute("stroke", "#444"); svg.appendChild(line);
+            }
+
+            // Frets
+            for (let f = 0; f <= frets; f++) {
+                const y = top + f * fy;
+                const line = document.createElementNS(svgNS, 'line');
+                line.setAttribute("x1", left);
+                line.setAttribute("x2", right);
+                line.setAttribute("y1", y); line.setAttribute("y2", y);
+                line.setAttribute("stroke", f === 0 ? "#222" : "#bbb"); line.setAttribute("stroke-width", f === 0 ? 3 : 1);
+                svg.appendChild(line);
+            }
+
+            // Lisää skaalaus
+            svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+            // Fret offset
+            const posList = ch.positions.filter(p => p > 0);
+            const minFret = posList.length ? Math.min(...posList) : 1;
+            const fretOffset = minFret > 1 ? minFret - 1 : 0;
+            if (fretOffset > 0) {
+                const t = document.createElementNS(svgNS, "text");
+                t.setAttribute("x", right + 6); t.setAttribute("y", top + 12); t.setAttribute("font-size", "8");
+                t.textContent = (fretOffset + 1) + "fr"; svg.appendChild(t);
+            }
+
+            // Draw notes
+            for (let s = 0; s < 6; s++) {
+                const pos = ch.positions[s];
+                const x = left + s * sx;
+
+                if (pos === -1) { // ei soiteta
+                    const t = document.createElementNS(svgNS, "text");
+                    t.setAttribute("x", x - 4);
+                    t.setAttribute("y", top - 4);
+                    t.textContent = "×";
+                    svg.appendChild(t);
+                } else if (pos === 0) { // avoin kieli
+                    const c = document.createElementNS(svgNS, 'circle');
+                    c.setAttribute("cx", x);
+                    c.setAttribute("cy", top - 6);
+                    c.setAttribute("r", 3);
+                    c.setAttribute("stroke", "#111");
+                    c.setAttribute("fill", "none");
+                    svg.appendChild(c);
+                } else { // painettu fretti
+                    // Fretin visuaalinen sijainti suhteessa diagrammin yläreunaan
+                    const y = top + (pos - fretOffset + 0.5) * fy;
+                    const dot = document.createElementNS(svgNS, 'circle');
+                    dot.setAttribute("cx", x);
+                    dot.setAttribute("cy", y);
+                    dot.setAttribute("r", 4.5);
+                    dot.setAttribute("fill", "#111");
+                    svg.appendChild(dot);
+                }
+            }
+            return svg;
+
+        }
+
+        // Make chord card
+        function makeCard(ch) {
+            const card = document.createElement("div"); card.className = "chord-card";
+            const title = document.createElement("div"); title.className = "chord-title"; title.textContent = ch.name; card.appendChild(title);
+            card.appendChild(drawFretboard(ch));
+            const meta = document.createElement("div"); meta.className = "meta"; meta.textContent = ch.info || ""; card.appendChild(meta);
+            return card;
+        }
+
+        // Show two chords
+        let current = [];
+        function showTwo(both = true) {
+            const list = filterList(filterSelect.value); if (list.length === 0) return;
+            if (both || current.length < 2) {
+                const a = list[Math.floor(Math.random() * list.length)];
+                let b = list[Math.floor(Math.random() * list.length)];
+                while (b.name === a.name) b = list[Math.floor(Math.random() * list.length)];
+                current = [a, b];
+            } else {
+                const a = current[0]; let b = list[Math.floor(Math.random() * list.length)];
+                while (b.name === a.name) b = list[Math.floor(Math.random() * list.length)];
+                current = [a, b];
+            }
+            renderCards();
+        }
+        function renderCards() { cards.innerHTML = ""; current.forEach(ch => cards.appendChild(makeCard(ch))); }
+
+        newBtn.addEventListener("click", () => showTwo(true));
+        swapBtn.addEventListener("click", () => showTwo(false));
+        filterSelect.addEventListener("change", () => showTwo(true));
+
+        window.addEventListener("pagehide", releaseWakeLock);
+    </script>
+</body>
+
+</html>

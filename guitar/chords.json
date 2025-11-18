@@ -1,0 +1,90 @@
+{
+  "chords": [
+    {
+      "name": "C",
+      "type": "major",
+      "fingers": "x32010",
+      "info": "Perus C-duuri avoimena",
+      "image": "img/chords/C-major.png"
+    },
+    {
+      "name": "D",
+      "type": "major",
+      "fingers": "xx0232",
+      "info": "D-duuri",
+      "image": "img/chords/D-major.png"
+    },
+    {
+      "name": "E",
+      "type": "major",
+      "fingers": "022100",
+      "info": "E-duuri",
+      "image": "img/chords/E-major.png"
+    },
+    {
+      "name": "F",
+      "type": "major",
+      "fingers": "133211",
+      "info": "F-duuri (barree)",
+      "image": "img/chords/F-major.png"
+    },
+    {
+      "name": "G",
+      "type": "major",
+      "fingers": "320003",
+      "info": "G-duuri",
+      "image": "img/chords/G-major.png"
+    },
+    {
+      "name": "A",
+      "type": "major",
+      "fingers": "x02220",
+      "info": "A-duuri",
+      "image": "img/chords/A-major.png"
+    },
+
+    {
+      "name": "Am",
+      "type": "minor",
+      "fingers": "x02210",
+      "info": "A-molli",
+      "image": "img/chords/A-minor.png"
+    },
+    {
+      "name": "Dm",
+      "type": "minor",
+      "fingers": "xx0231",
+      "info": "D-molli",
+      "image": "img/chords/D-minor.png"
+    },
+    {
+      "name": "Em",
+      "type": "minor",
+      "fingers": "022000",
+      "info": "E-molli",
+      "image": "img/chords/E-minor.png"
+    },
+
+    {
+      "name": "A7",
+      "type": "dominant7",
+      "fingers": "x02020",
+      "info": "A7",
+      "image": "img/chords/A7.png"
+    },
+    {
+      "name": "B7",
+      "type": "dominant7",
+      "fingers": "x21202",
+      "info": "B7",
+      "image": "img/chords/B7.png"
+    },
+    {
+      "name": "E7",
+      "type": "dominant7",
+      "fingers": "020100",
+      "info": "E7",
+      "image": "img/chords/E7.png"
+    }
+  ]
+}
