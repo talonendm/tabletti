@@ -1,0 +1,112 @@
+[
+  {
+    "aihe": "polynomiyhtalo",
+    "tehtava": "Ratkaise polynomiyhtälö 2x + 3 = 11.",
+    "ratkaisu": "2x + 3 = 11 → 2x = 8 → x = 4."
+  },
+  {
+    "aihe": "polynomiyhtalo",
+    "tehtava": "Ratkaise polynomiyhtälö x^2 - 5x + 6 = 0.",
+    "ratkaisu": "x^2 - 5x + 6 = 0 → (x - 2)(x - 3) = 0 → x = 2 tai x = 3."
+  },
+  {
+    "aihe": "polynomiepayhtalo",
+    "tehtava": "Ratkaise polynomiepäyhtälö x^2 - 4 < 0.",
+    "ratkaisu": "x^2 - 4 < 0 → (x - 2)(x + 2) < 0. Tulo on negatiivinen juurten -2 ja 2 välissä → -2 < x < 2."
+  },
+  {
+    "aihe": "polynomiepayhtalo",
+    "tehtava": "Ratkaise polynomiepäyhtälö x^2 - x - 6 ≥ 0.",
+    "ratkaisu": "x^2 - x - 6 = (x - 3)(x + 2). Tulo ≥ 0, kun x ≤ -2 tai x ≥ 3."
+  },
+  {
+    "aihe": "toisen_asteen_yhtalo",
+    "tehtava": "Ratkaise yhtälö 2x^2 - 3x - 2 = 0 ratkaisukaavalla.",
+    "ratkaisu": "a = 2, b = -3, c = -2. b^2 - 4ac = 9 + 16 = 25. x = (-b ± √(b^2 - 4ac)) / (2a) = (3 ± 5) / 4 → x = 2 tai x = -1/2."
+  },
+  {
+    "aihe": "toisen_asteen_yhtalo",
+    "tehtava": "Ratkaise yhtälö x^2 + 4x + 4 = 0.",
+    "ratkaisu": "x^2 + 4x + 4 = (x + 2)^2 = 0 → x = -2 (kaksoisjuuri)."
+  },
+  {
+    "aihe": "binomikaavat",
+    "tehtava": "Laajenna ja supista lauseke (x + 5)^2.",
+    "ratkaisu": "(x + 5)^2 = x^2 + 2·x·5 + 5^2 = x^2 + 10x + 25."
+  },
+  {
+    "aihe": "binomikaavat",
+    "tehtava": "Laajenna lauseke (2x - 3)^2.",
+    "ratkaisu": "(2x - 3)^2 = (2x)^2 - 2·2x·3 + 3^2 = 4x^2 - 12x + 9."
+  },
+  {
+    "aihe": "binomikaavat",
+    "tehtava": "Sievennä (x + 4)(x - 4).",
+    "ratkaisu": "(x + 4)(x - 4) = x^2 - 4^2 = x^2 - 16."
+  },
+  {
+    "aihe": "polynomien_tulo",
+    "tehtava": "Laske polynomien tulo (x + 2)(x - 3).",
+    "ratkaisu": "(x + 2)(x - 3) = x^2 - 3x + 2x - 6 = x^2 - x - 6."
+  },
+  {
+    "aihe": "polynomien_tulo",
+    "tehtava": "Laske (2x - 1)(x + 4).",
+    "ratkaisu": "2x·x + 2x·4 - 1·x - 1·4 = 2x^2 + 8x - x - 4 = 2x^2 + 7x - 4."
+  },
+  {
+    "aihe": "tekijointi",
+    "tehtava": "Jaa tekijöihin polynomi x^2 - 7x + 12.",
+    "ratkaisu": "Etsitään luvut, joiden summa on -7 ja tulo 12 → -3 ja -4. x^2 - 7x + 12 = (x - 3)(x - 4)."
+  },
+  {
+    "aihe": "tekijointi",
+    "tehtava": "Jaa tekijöihin polynomi 3x^2 + 9x.",
+    "ratkaisu": "Otetaan yhteinen tekijä 3x ulos: 3x^2 + 9x = 3x(x + 3)."
+  },
+  {
+    "aihe": "potenssifunktio",
+    "tehtava": "Laske f(2), kun f(x) = 2x^3 - x.",
+    "ratkaisu": "f(2) = 2·2^3 - 2 = 2·8 - 2 = 16 - 2 = 14."
+  },
+  {
+    "aihe": "potenssiyhtalo",
+    "tehtava": "Ratkaise yhtälö x^3 = 27.",
+    "ratkaisu": "Otetaan kuutiojuuri: x = 3√27 = 3."
+  },
+  {
+    "aihe": "potenssiyhtalo",
+    "tehtava": "Ratkaise yhtälö 5x^2 = 45.",
+    "ratkaisu": "Jaetaan 5: x^2 = 9 → x = 3 tai x = -3."
+  },
+  {
+    "aihe": "rationaalifunktio",
+    "tehtava": "Määritä funktion f(x) = (x + 1) / (x - 2) määrittelyjoukko.",
+    "ratkaisu": "Nimittäjä ei saa olla 0: x - 2 ≠ 0 → x ≠ 2. Määrittelyjoukko on kaikki reaaliluvut paitsi 2."
+  },
+  {
+    "aihe": "rationaaliyhtalo",
+    "tehtava": "Ratkaise rationaaliyhtälö (x + 1) / (x - 2) = 3.",
+    "ratkaisu": "Kerrotaan puolittain (x - 2): x + 1 = 3(x - 2) → x + 1 = 3x - 6 → 7 = 2x → x = 7/2. Tarkistus: x ≠ 2, joten ratkaisu kelpaa."
+  },
+  {
+    "aihe": "rationaaliyhtalo",
+    "tehtava": "Ratkaise yhtälö 2 / (x - 1) = 1.",
+    "ratkaisu": "2 / (x - 1) = 1 → 2 = x - 1 → x = 3. Tarkistus: x ≠ 1, joten x = 3 kelpaa."
+  },
+  {
+    "aihe": "juurifunktio",
+    "tehtava": "Laske f(5), kun f(x) = √(x + 4).",
+    "ratkaisu": "f(5) = √(5 + 4) = √9 = 3."
+  },
+  {
+    "aihe": "juuriyhtalo",
+    "tehtava": "Ratkaise yhtälö √(x + 1) = 5.",
+    "ratkaisu": "Korotetaan puolittain toiseen: x + 1 = 25 → x = 24. Tarkistus: √(24 + 1) = √25 = 5, joten ratkaisu kelpaa."
+  },
+  {
+    "aihe": "juuriyhtalo",
+    "tehtava": "Ratkaise yhtälö √x = 2.",
+    "ratkaisu": "Korotetaan puolittain toiseen: x = 4. Juurifunktion määritelmästä x ≥ 0, joten x = 4 on kelvollinen."
+  }
+]

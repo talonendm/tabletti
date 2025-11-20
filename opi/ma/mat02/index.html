@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcardit – kaksi korttia vierekkäin</title>
+    <style>
+        :root {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .app {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .controls button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.5rem 1rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            background: #111827;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .controls button.secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .controls button:active {
+            transform: scale(0.97);
+        }
+
+        .status {
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+
+        .cards-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+        }
+
+        .cards {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        @media (max-width: 800px) {
+            .cards {
+                flex-direction: column;
+            }
+        }
+
+        .card-slot {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            min-height: 220px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            background: white;
+            padding: 1.25rem 1.5rem;
+            box-sizing: border-box;
+            transition: transform 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            inset: 0;
+            padding: 1.25rem 1.5rem;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .front-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .front-text,
+        .back-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: auto;
+            text-align: right;
+        }
+
+        .deck-select {
+            font-size: 0.9rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid #d1d5db;
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <header>
+            <h1>Matikan flashcardit (2 korttia kerralla)</h1>
+            <div class="controls">
+                <button id="prevBtn" class="secondary" type="button">
+                    ⬅️ Edellinen
+                </button>
+                <button id="playBtn" type="button">
+                    ▶️ Play
+                </button>
+                <button id="nextBtn" class="secondary" type="button">
+                    Seuraava ➡️
+                </button>
+
+                <select id="deckSelect" class="deck-select">
+                    <option value="all">Kaikki kortit</option>
+                    <option value="concept">Vain käsitteet</option>
+                    <option value="exercise">Vain laskuesimerkit</option>
+                </select>
+
+                <span class="status" id="statusText">Paina Play aloittaaksesi automaattisen selailun.</span>
+            </div>
+        </header>
+
+        <div class="cards-wrapper" id="swipeArea">
+            <div class="cards">
+                <div class="card-slot">
+                    <div class="card" data-slot="0">
+                        <div class="card-inner">
+                            <div class="card-face card-front">
+                                <div class="tag" data-tag></div>
+                                <div class="front-title" data-front-title></div>
+                                <div class="front-text" data-front-text></div>
+                                <div class="help-text">Napauta korttia kääntääksesi</div>
+                            </div>
+                            <div class="card-face card-back">
+                                <div class="tag" data-tag></div>
+                                <div class="back-text" data-back-text></div>
+                                <div class="help-text">Napauta korttia nähdäksesi etupuolen</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-slot">
+                    <div class="card" data-slot="1">
+                        <div class="card-inner">
+                            <div class="card-face card-front">
+                                <div class="tag" data-tag></div>
+                                <div class="front-title" data-front-title></div>
+                                <div class="front-text" data-front-text></div>
+                                <div class="help-text">Napauta korttia kääntääksesi</div>
+                            </div>
+                            <div class="card-face card-back">
+                                <div class="tag" data-tag></div>
+                                <div class="back-text" data-back-text></div>
+                                <div class="help-text">Napauta korttia nähdäksesi etupuolen</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let conceptCards = [];
+        let exerciseCards = [];
+
+        async function loadCards() {
+            const [conceptData, exerciseData] = await Promise.all([
+                fetch("./data/concepts.json").then(res => res.json()),
+                fetch("./data/exercises.json").then(res => res.json())
+            ]);
+
+            conceptCards = conceptData.map(item => ({
+                type: "concept",
+                frontTitle: item.kasite,
+                frontText: item.kasite,
+                backText: item.selitys +
+                    (item.esimerkki ? `\n\nEsimerkki: ${item.esimerkki}` : "")
+            }));
+
+            exerciseCards = exerciseData.map(item => ({
+                type: "exercise",
+                frontTitle: item.aihe,
+                frontText: item.tehtava,
+                backText: item.ratkaisu
+            }));
+
+            buildDeck();
+        }
+
+
+let concepts = [];
+let exercises = [];
+
+let indexConcept = 0;
+let indexExercise = 0;
+
+let isPlaying = false;
+let playInterval = null;
+
+// ---------------- JSON-lataus ----------------
+
+async function loadCards() {
+  const [conceptData, exerciseData] = await Promise.all([
+    fetch("./data/concepts.json").then(res => res.json()),
+    fetch("./data/exercises.json").then(res => res.json())
+  ]);
+
+  concepts = conceptData.map(c => ({
+    type: "concept",
+    frontText: c.kasite,
+    backText: c.selitys + (c.esimerkki ? `\n\nEsimerkki: ${c.esimerkki}` : "")
+  }));
+
+  exercises = exerciseData.map(e => ({
+    type: "exercise",
+    frontText: e.tehtava,
+    backText: e.ratkaisu
+  }));
+
+  renderCards();
+  updateStatus();
+}
+
+// ---------------- Korttien näyttö ----------------
+
+function renderCards() {
+  renderCard(0, concepts[indexConcept], "Käsite");
+  renderCard(1, exercises[indexExercise], "Laskuesimerkki");
+}
+
+function renderCard(slot, cardData, tagText) {
+  const cardEl = document.querySelector(`.card[data-slot="${slot}"]`);
+  if (!cardData) return;
+
+  cardEl.querySelector("[data-tag]").textContent = tagText;
+  cardEl.querySelector("[data-front-text]").textContent = cardData.frontText;
+  cardEl.querySelector("[data-back-text]").textContent = cardData.backText;
+}
+
+// ---------------- Navigointi ----------------
+
+function nextPair() {
+  indexConcept = (indexConcept + 1) % concepts.length;
+  indexExercise = (indexExercise + 1) % exercises.length;
+  resetFlips();
+  renderCards();
+  updateStatus();
+}
+
+function prevPair() {
+  indexConcept = (indexConcept - 1 + concepts.length) % concepts.length;
+  indexExercise = (indexExercise - 1 + exercises.length) % exercises.length;
+  resetFlips();
+  renderCards();
+  updateStatus();
+}
+
+function resetFlips() {
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("flipped"));
+}
+
+// ---------------- Status ----------------
+
+function updateStatus() {
+  const s = document.getElementById("statusText");
+  s.textContent = `Korttipari ${indexConcept + 1}/${concepts.length}`;
+}
+
+// ---------------- Play-toiminto ----------------
+
+const PLAY_QUESTION = 8000;
+const PLAY_ANSWER = 8000;
+
+function startPlay() {
+  if (isPlaying) return;
+  if (!concepts.length || !exercises.length) return;
+
+  isPlaying = true;
+  document.getElementById("playBtn").textContent = "⏸ Pause";
+  updateStatus();
+
+  let showingAnswer = false;
+
+  playInterval = setInterval(() => {
+    const cards = document.querySelectorAll(".card");
+
+    if (!showingAnswer) {
+      cards.forEach(c => c.classList.add("flipped"));
+      showingAnswer = true;
+    } else {
+      nextPair();
+      cards.forEach(c => c.classList.remove("flipped"));
+      showingAnswer = false;
+    }
+  }, showingAnswer ? PLAY_ANSWER : PLAY_QUESTION);
+}
+
+function stopPlay() {
+  isPlaying = false;
+  document.getElementById("playBtn").textContent = "▶️ Play";
+  if (playInterval) clearInterval(playInterval);
+}
+
+function togglePlay() {
+  if (isPlaying) stopPlay();
+  else startPlay();
+}
+
+// ---------------- Alustus ----------------
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("prevBtn").addEventListener("click", prevPair);
+  document.getElementById("nextBtn").addEventListener("click", nextPair);
+  document.getElementById("playBtn").addEventListener("click", togglePlay);
+
+  document.querySelectorAll(".card").forEach(c =>
+    c.addEventListener("click", () => c.classList.toggle("flipped"))
+  );
+
+  loadCards();
+});
+
+    </script>
+</body>
+
+</html>

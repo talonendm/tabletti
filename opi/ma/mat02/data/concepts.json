@@ -1,0 +1,82 @@
+[
+  {
+    "kasite": "Polynomifunktio",
+    "selitys": "Polynomifunktio on funktio, jonka lauseke on polynomi eli muuttujan x potenssien ja vakioiden summa. Potenssien eksponentit ovat epänegatiivisia kokonaislukuja.",
+    "esimerkki": "f(x) = 3x^3 - 2x + 5"
+  },
+  {
+    "kasite": "Polynomiyhtälö",
+    "selitys": "Polynomiyhtälö on yhtälö, jossa vasen ja/tai oikea puoli on polynomi. Ratkaiseminen tarkoittaa sellaisten x:n arvojen etsimistä, joilla yhtälö toteutuu.",
+    "esimerkki": "x^2 - 5x + 6 = 0"
+  },
+  {
+    "kasite": "Polynomiepäyhtälö",
+    "selitys": "Polynomiepäyhtälössä polynomi verrataan toiseen polynomiin tai lukuun <, >, ≤ tai ≥ -merkein. Ratkaisu on kaikki x:n arvot, joilla epäyhtälö on tosi.",
+    "esimerkki": "x^2 - 4 < 0"
+  },
+  {
+    "kasite": "2. asteen yhtälö",
+    "selitys": "2. asteen yhtälö on muotoa ax^2 + bx + c = 0, missä a ≠ 0. Sillä voi olla kaksi, yksi tai ei yhtään reaaliratkaisua.",
+    "esimerkki": "2x^2 - 3x - 2 = 0"
+  },
+  {
+    "kasite": "2. asteen yhtälön ratkaisukaava",
+    "selitys": "Kaava, jolla voidaan ratkaista kaikki 2. asteen yhtälöt ax^2 + bx + c = 0. Ratkaisut ovat x = (-b ± √(b^2 - 4ac)) / (2a).",
+    "esimerkki": "Yhtälölle x^2 - 3x + 2 = 0 saadaan x = (3 ± √(9 - 8)) / 2 → x = 1 tai x = 2."
+  },
+  {
+    "kasite": "Summan neliö",
+    "selitys": "Binomikaava, joka kertoo (a + b)^2:n laajennuksen: (a + b)^2 = a^2 + 2ab + b^2.",
+    "esimerkki": "(x + 3)^2 = x^2 + 6x + 9"
+  },
+  {
+    "kasite": "Erotuksen neliö",
+    "selitys": "Binomikaava, joka kertoo (a - b)^2:n laajennuksen: (a - b)^2 = a^2 - 2ab + b^2.",
+    "esimerkki": "(x - 5)^2 = x^2 - 10x + 25"
+  },
+  {
+    "kasite": "Summan ja erotuksen tulo",
+    "selitys": "Binomikaava, joka kertoo (a + b)(a - b):n laajennuksen: (a + b)(a - b) = a^2 - b^2.",
+    "esimerkki": "(x + 4)(x - 4) = x^2 - 16"
+  },
+  {
+    "kasite": "Polynomien tulo",
+    "selitys": "Polynomien tulo saadaan kertomalla jokainen termin tekijä toisella ja yhdistämällä samanlaiset termit.",
+    "esimerkki": "(x + 2)(x - 3) = x^2 - 3x + 2x - 6 = x^2 - x - 6"
+  },
+  {
+    "kasite": "Polynomien tekijöihin jakaminen",
+    "selitys": "Polynomin esittäminen tulona, esim. binomien tulona. Usein käytetään yhteisen tekijän ulosottoa, binomikaavoja tai nollakohtien avulla faktorisointia.",
+    "esimerkki": "x^2 - 5x + 6 = (x - 2)(x - 3)"
+  },
+  {
+    "kasite": "Potenssifunktio",
+    "selitys": "Potenssifunktion muoto on f(x) = x^n tai f(x) = kx^n, missä n on positiivinen kokonaisluku ja k vakio.",
+    "esimerkki": "f(x) = 2x^3"
+  },
+  {
+    "kasite": "Potenssiyhtälö",
+    "selitys": "Yhtälö, jossa tuntematon x esiintyy eksponenttina positiivisena kokonaislukuna. Ratkaistaan usein juurten tai vastaavan käänteisoperaation avulla.",
+    "esimerkki": "x^3 = 27"
+  },
+  {
+    "kasite": "Rationaalifunktio",
+    "selitys": "Rationaalifunktio on kahden polynomifunktion osamäärä. Lauseke on muotoa f(x) = p(x) / q(x), missä p ja q ovat polynomeja ja q(x) ≠ 0.",
+    "esimerkki": "f(x) = (2x + 1) / (x - 3)"
+  },
+  {
+    "kasite": "Rationaaliyhtälö",
+    "selitys": "Yhtälö, jossa x esiintyy nimittäjässä. Ratkaistaan usein kertomalla puolittain nimittäjillä, tarkistaen lopuksi kielletyt arvot.",
+    "esimerkki": "(x + 1) / (x - 2) = 3"
+  },
+  {
+    "kasite": "Juurifunktio",
+    "selitys": "Funktio, jossa x esiintyy juurimerkin sisällä. Tyypillinen muoto on f(x) = √x tai f(x) = n√x, missä n on positiivinen kokonaisluku.",
+    "esimerkki": "f(x) = √(x + 4)"
+  },
+  {
+    "kasite": "Juuriyhtälö",
+    "selitys": "Yhtälö, jossa tuntematon esiintyy juuren sisällä. Usein ratkaistaan korottamalla yhtälö sopivalle potenssille juurimerkin poistamiseksi.",
+    "esimerkki": "√(x + 1) = 5"
+  }
+]
